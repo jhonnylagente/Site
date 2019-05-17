@@ -1,0 +1,937 @@
+using System;
+using System.Data;
+using System.Configuration;
+using System.Collections;
+using System.Web;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
+using System.Web.UI.HtmlControls;
+using System.Text.RegularExpressions;
+using System.IO;
+using System.Data.Odbc;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+
+
+public partial class recherche : System.Web.UI.Page
+{
+    
+    public void Page_Load(object sender, EventArgs e)
+    {
+        
+
+        #region autre
+
+        ((System.Web.UI.WebControls.Label)Page.Master.FindControl("titrebandeau")).Text = "Recherche";
+
+        try
+        {
+            LabelErrorLogin.Visible = false;
+            if (Request.Params["typebien"].ToString() == "vente")
+            {
+                Session["checkBoxMaisonR"] = true;
+                Session["checkBoxAppartR"] = true;
+                Session["checkBoxTerrainR"] = true;
+                Session["checkBoxAutreR"] = true;
+                Session["radioButtonAchatR"] = true;
+                Session["TextBoxBudgetMinR"] = "";
+            }
+            if (Request.Params["typebien"].ToString() == "ventemaison")
+            {
+                Session["checkBoxMaisonR"] = true;
+                Session["checkBoxAppartR"] = false;
+                Session["checkBoxTerrainR"] = false;
+                Session["checkBoxAutreR"] = false;
+                Session["radioButtonAchatR"] = true;
+                Session["TextBoxBudgetMinR"] = "";
+            }
+            if (Request.Params["typebien"].ToString() == "venteappart")
+            {
+                Session["checkBoxMaisonR"] = false;
+                Session["checkBoxAppartR"] = true;
+                Session["checkBoxTerrainR"] = false;
+                Session["checkBoxAutreR"] = false;
+                Session["radioButtonAchatR"] = true;
+                Session["TextBoxBudgetMinR"] = "";
+            }
+            if (Request.Params["typebien"].ToString() == "venteterrain")
+            {
+                Session["checkBoxMaisonR"] = false;
+                Session["checkBoxAppartR"] = false;
+                Session["checkBoxTerrainR"] = true;
+                Session["checkBoxAutreR"] = false;
+                Session["radioButtonAchatR"] = true;
+                Session["TextBoxBudgetMinR"] = "";
+            }
+            if (Request.Params["typebien"].ToString() == "venteautres")
+            {
+                Session["checkBoxMaisonR"] = false;
+                Session["checkBoxAppartR"] = false;
+                Session["checkBoxTerrainR"] = false;
+                Session["checkBoxAutreR"] = true;
+                Session["radioButtonAchatR"] = true;
+                Session["TextBoxBudgetMinR"] = "";
+            }
+            if (Request.Params["typebien"].ToString() == "location")
+            {
+                Session["checkBoxAppartR"] = true;
+                Session["checkBoxMaisonR"] = true;
+                Session["checkBoxTerrainR"] = true;
+                Session["checkBoxAutreR"] = true;
+                Session["TextBoxBudgetMinR"] = "";
+                Session["radioButtonAchatR"] = false;
+                radioButtonLocation.Checked = true;
+            }
+            if (Request.Params["typebien"].ToString() == "demeure")
+            {
+                Session["checkBoxMaisonR"] = true;
+                Session["checkBoxAppartR"] = true;
+                TextBoxBudgetMin.Text = "500000";
+                TextBoxBudgetMin.ReadOnly = true;
+                Session["TextBoxBudgetMinR"] = "500000";
+                Session["checkBoxTerrainR"] = false;
+                Session["checkBoxAutreR"] = false;
+                Session["radioButtonAchatR"] = true;
+            }
+		}
+        catch
+        {
+
+        }	
+		if (!IsPostBack)
+        {
+			if(Session["Transaction"]=="achat" || Session["Transaction"]=="")
+			{	
+				radioButtonAchat.Checked = true;
+			}
+			else
+			{	
+				radioButtonLocation.Checked = true;
+			}
+			
+			checkBoxMaison.Checked = (bool)Session["checkBoxMaison"];
+            checkBoxAppart.Checked = (bool)Session["checkBoxAppart"];
+            checkBoxTerrain.Checked = (bool)Session["checkBoxTerrain"];
+            checkBoxAutre.Checked = (bool)Session["checkBoxAutre"];
+			
+			textBoxVille1.Text = (String)Session["Localisation"];
+			
+			textBoxMotCle1.Text = (String)Session["textBoxMotCle1"];
+            textBoxMotCle2.Text = (String)Session["textBoxMotCle2"];
+            textBoxMotCle3.Text = (String)Session["textBoxMotCle3"];
+            textBoxMotCle4.Text = (String)Session["textBoxMotCle4"];
+			
+            TextBoxBudgetMin.Text = (String)Session["TextBoxBudgetMin"];
+            TextBoxBudgetMax.Text = (String)Session["TextBoxBudgetMax"];
+			
+            textBoxSurfaceMin.Text = (String)Session["textBoxSurfaceMin"];
+            textBoxSurfaceMax.Text = (String)Session["textBoxSurfaceMax"];
+			
+            checkBoxPiece1.Checked = (bool)Session["checkBoxPiece1"];
+            checkBoxPiece2.Checked = (bool)Session["checkBoxPiece2"];
+            checkBoxPiece3.Checked = (bool)Session["checkBoxPiece3"];
+            checkBoxPiece4.Checked = (bool)Session["checkBoxPiece4"];
+            checkBoxPiece5.Checked = (bool)Session["checkBoxPiece5"];
+		}	
+
+        #endregion
+
+        #region plein de try catch
+
+        if (IsPostBack == false)
+        {
+            Boolean achatChecked = false;
+            Boolean pieces1Checked = false;
+            Boolean pieces2Checked = false;
+            Boolean pieces3Checked = false;
+            Boolean pieces4Checked = false;
+            Boolean pieces5Checked = false;
+            Boolean maisonChecked = false;
+            Boolean appartementChecked = false;
+            Boolean terrainChecked = false;
+            Boolean autreChecked = false;
+
+            //Label1.Text = "";
+
+        }
+
+        #endregion
+
+        //if (Request.Cookies["ClientID"] != null)
+        //{
+        //    Session["logged"] = true;
+        //}
+        #region random_slider
+
+        Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
+        Random rand = new Random(); // random pour peinture ou autres images
+
+        string[] lines = System.IO.File.ReadAllLines(@"..\patrimo\pages\xml_temp.xml");
+        var lines1 = "<ImageUrl></ImageUrl>";
+
+        //Génère un chiffre entre 0 et 3, pour choisir peintures ou autres images s'il y a
+
+        Double p = Math.Round(rand.NextDouble() * 3); //fonction "Math.round" arrondit; on ne peut avoir que 0, 1, 2 ou 3
+
+        //Regarde les répertoires existant et pioche les photos du répertoire pris au hasard
+
+        String[] repertoires = System.IO.Directory.GetDirectories(@"..\patrimo\imageresource\");
+
+        Random path_random = new Random(); // random pour les thèmes
+
+        string[] photos;
+        int new_path;
+
+        do
+        {
+            new_path = Convert.ToInt32(Math.Round(unchecked(path_random.NextDouble() * (repertoires.Length - 1))));
+
+            photos = System.IO.Directory.GetFiles(repertoires[new_path], "*.png");
+
+        } while (photos.Length < 3); // s'il y a moins de 3 photos recommencer le random 
+
+        List<string> Paint = new List<string>();
+
+        List<string> Other = new List<string>();
+
+        string path = @"..\patrimo\imageresource\";
+
+        string path2 = "~/ImageResource/";
+
+        //*************** remplit les tableaux suivant les thèmes existant **********************//
+
+        for
+          (int X = 0; X <= photos.Length - 1; X++)
+        {
+            photos[X] = photos[X].Replace(path, "");
+
+            //*********************************************************************************
+            //********************* paint... **************************************************
+            //*********************************************************************************
+
+            if (photos[X].Contains("paint"))
+            {
+
+                Paint.Add(photos[X]);
+
+            }
+
+//*********************************************************************************
+            //********************* ...sinon other ********************************************
+            //*********************************************************************************
+            else
+            {
+                Other.Add(photos[X]);
+            }
+
+        }
+
+        // *************************** on passe au random *************************************************//
+
+        Random rand2 = new Random();
+
+        int[] paint_random;
+        paint_random = new int[3];
+        int[] other_random;
+        other_random = new int[3];
+
+        //**** permet d'avoir 3 chiffres au hasard et différents compris entre 0 et la taille max du tableau Paint[] ****
+
+        if (Paint.Count >= 3)
+        {
+            for
+                  (int X = 0; X <= 2; X++)
+            {
+                paint_random[X] = Convert.ToInt32(Math.Round(unchecked(rand2.NextDouble() * (Paint.Count - 1))));
+                //Convert.ToInt32 : Converti "double" en "int" pour pour utiliser la variable dans le tableau
+                //unchecked : permet de ne pas avoir deux fois la même valeur
+
+                //permet de répéter le random jusqu'à ce qu'on ait trois chiffres différents
+                if (X > 0)
+                {
+                    if (paint_random[X - 1].Equals(paint_random[X]))
+                    {
+                        X = X - 1;
+                    }
+
+                }
+                if (X > 1)
+                {
+                    if (paint_random[X - 2].Equals(paint_random[X]))
+                    {
+                        X = X - 2;
+                    }
+                }
+            }
+        }
+
+        //**** permet d'avoir 3 chiffres au hasard et différents compris entre 0 et la taille max du tableau Other[] ****
+        for
+              (int X = 0; X <= 2; X++)
+        {
+
+            other_random[X] = Convert.ToInt32(Math.Round(unchecked(rand2.NextDouble() * (Other.Count - 1))));
+
+            if (X > 0)
+            {
+                if (other_random[X - 1].Equals(other_random[X]))
+                {
+                    X = X - 1;
+                }
+            }
+            if (X > 1)
+            {
+                if (other_random[X - 2].Equals(other_random[X]))
+                {
+                    X = X - 2;
+                }
+            }
+        }
+
+        System.IO.TextWriter writeFile = new System.IO.StreamWriter(@"..\patrimo\Ads.xml");
+
+        //************* si le nombre de peintures est supérieur ou égal à 3 peintures écrire xml peintures ou autres images *****************
+
+        if (Paint.Count >= 3)
+        {
+
+            if (p < 2)// soit peintures ...
+            {
+                for (int X = 0; X <= lines.Length - 1; X++)
+                {
+
+                    if (lines[X].Contains(lines1))
+                    {
+                        writeFile.WriteLine("<ImageUrl>" + path2 + Paint[paint_random[0]] + "</ImageUrl>");
+                    }
+                    else
+                    {
+                        writeFile.WriteLine(lines[X]);
+                    }
+
+                }
+
+            }
+            else// ... soit photos
+            {
+                for (int X = 0; X <= lines.Length - 1; X++)
+                {
+
+                    if (lines[X].Contains(lines1))
+                    {
+                        writeFile.WriteLine("<ImageUrl>" + path2 + Other[other_random[0]] + "</ImageUrl>");
+                    }
+                    else
+                    {
+                        writeFile.WriteLine(lines[X]);
+                    }
+                }
+
+            }
+        }
+
+// ******************************** ... sinon écrire simplement autres images ************************************************
+        else
+        {
+            for (int X = 0; X <= lines.Length - 1; X++)
+            {
+
+                if (lines[X].Contains(lines1))
+                {
+                    writeFile.WriteLine("<ImageUrl>" + path2 + Other[other_random[0]] + "</ImageUrl>");
+                }
+                else
+                {
+                    writeFile.WriteLine(lines[X]);
+                }
+            }
+        }
+
+        writeFile.Flush();
+        writeFile.Close();
+        writeFile = null;
+
+
+        // répète la procédure pour deux autre fichier xml
+
+        writeFile = new System.IO.StreamWriter(@"..\patrimo\Ads2.xml");
+
+        if (Paint.Count >= 3)
+        {
+            if (p < 2)// soit peintures ...
+            {
+                for (int X = 0; X <= lines.Length - 1; X++)
+                {
+                    if (lines[X].Contains(lines1))
+                    {
+                        writeFile.WriteLine("<ImageUrl>" + path2 + Paint[paint_random[1]] + "</ImageUrl>");
+                    }
+                    else
+                    {
+                        writeFile.WriteLine(lines[X]);
+                    }
+                }
+
+            }
+            else// ... soit photos
+            {
+                for (int X = 0; X <= lines.Length - 1; X++)
+                {
+                    if (lines[X].Contains(lines1))
+                    {
+                        writeFile.WriteLine("<ImageUrl>" + path2 + Other[other_random[1]] + "</ImageUrl>");
+                    }
+                    else
+                    {
+                        writeFile.WriteLine(lines[X]);
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (int X = 0; X <= lines.Length - 1; X++)
+            {
+
+                if (lines[X].Contains(lines1))
+                {
+                    writeFile.WriteLine("<ImageUrl>" + path2 + Other[other_random[1]] + "</ImageUrl>");
+                }
+                else
+                {
+                    writeFile.WriteLine(lines[X]);
+                }
+            }
+        }
+        writeFile.Flush();
+        writeFile.Close();
+        writeFile = null;
+
+
+
+        writeFile = new System.IO.StreamWriter(@"..\patrimo\Ads3.xml");
+
+        if (Paint.Count >= 3)
+        {
+            if (p < 2)// soit peintures ...
+            {
+                for (int X = 0; X <= lines.Length - 1; X++)
+                {
+
+                    if (lines[X].Contains(lines1))
+                    {
+                        writeFile.WriteLine("<ImageUrl>" + path2 + Paint[paint_random[2]] + "</ImageUrl>");
+                    }
+                    else
+                    {
+                        writeFile.WriteLine(lines[X]);
+                    }
+                }
+            }
+            else// ... soit photos
+            {
+                for (int X = 0; X <= lines.Length - 1; X++)
+                {
+
+                    if (lines[X].Contains(lines1))
+                    {
+                        writeFile.WriteLine("<ImageUrl>" + path2 + Other[other_random[2]] + "</ImageUrl>");
+                    }
+                    else
+                    {
+                        writeFile.WriteLine(lines[X]);
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (int X = 0; X <= lines.Length - 1; X++)
+            {
+
+                if (lines[X].Contains(lines1))
+                {
+                    writeFile.WriteLine("<ImageUrl>" + path2 + Other[other_random[2]] + "</ImageUrl>");
+                }
+                else
+                {
+                    writeFile.WriteLine(lines[X]);
+                }
+            }
+        }
+
+        writeFile.Flush();
+        writeFile.Close();
+        writeFile = null;
+
+        System.Threading.Thread.Sleep(50);//temps de latence en millisecondes pour que la création de fichiers soit bien effective avant l'ouverture de la page.
+        # endregion
+
+       
+    }
+
+   
+
+    private RequeteBien verifChampSaisi(RequeteBien maRecher)
+    {
+
+        #region attribut
+        Regex numReg = new Regex("^[0-9 ]+$");
+        Regex alphaNumReg = new Regex("^[0-9]+$|^[a-zA-Zéèçàâù . , ' ]+$|^()+$");
+
+
+        /// 3 bool permettant d'identifier si la recherche se fait par code postaux , departement ou nom de la ville
+        bool ville1CodePostal = new Boolean();
+        bool ville1Dep = new Boolean();
+        bool ville1Nom = new Boolean();
+
+
+
+        bool regSurfaceMin = false;
+        bool regSurfaceMax = false;
+        bool regBudgetMin = false;
+        bool regBudgetMax = false;
+
+
+        ville1CodePostal = false;
+        ville1Dep = false;
+        ville1Nom = false;
+
+
+
+        /// Contenu des textBox des ville apres un trim
+        String ville1 = textBoxVille1.Text.Trim();
+ 
+
+        String smin = "erreur de saisie pour la surface minimal";
+        String smax = "\n erreur de saisie pour la surface maximal";
+        String bmin = "\n erreur de saisie pour la budget minimal";
+        String bmax = "\n erreur de saisie pour la budget maximal";
+        String ville_1 = "\n erreur de saisie pour la ville";
+
+        //Regex rCP = new Regex(@"^\d{5}$");
+        Regex rCP = new Regex(@"^([0-9][0-9][0-9][0-9][0-9][ ]?)+$");
+        Regex rDepartement = new Regex(@"^([0-9][0-9][ ]?)+$");
+
+
+
+
+         //Série de test sur les textBoxs des ville pour savoir si la recherche est Code postal, departement ou nom de ville
+
+
+
+        ///Verif si la demande sur textBoxVille1 est code postal , departement ou nom
+
+        maRecher.VILLE1_REG = true;
+        if (rCP.IsMatch(ville1))
+        {
+            maRecher.VILLE1_CODE_DEP = "code postal";
+        }
+        else if (rDepartement.IsMatch(ville1))
+        {
+            maRecher.VILLE1_CODE_DEP = "departement";
+        }
+        else if (ville1.Length > 0)
+        {
+            maRecher.VILLE1_CODE_DEP = "nom";
+        }
+        else
+        {
+            maRecher.VILLE1_REG = false;
+        }
+        
+
+
+
+        //#endregion
+
+
+
+        //if (ville1.Length == 0) maRecher.VILLE1_REG = false;
+        //else if (ville1CodePostal || ville1Dep || ville1Nom) { maRecher.VILLE1_REG = true; }
+
+        TextBoxBudgetMin.Text = TextBoxBudgetMin.Text.Replace(" ", "");
+        TextBoxBudgetMax.Text = TextBoxBudgetMax.Text.Replace(" ", "");
+
+
+
+        //test le contenu des box par expression reguliere si OK alors true
+        if (textBoxSurfaceMin.Text.Trim() != "")
+        {
+            regSurfaceMin = numReg.IsMatch(textBoxSurfaceMin.Text.Trim());
+        }
+        else regSurfaceMin = true; // si la text box est vide on effectue qd meme la recherche
+
+        if (textBoxSurfaceMax.Text.Trim() != "")
+        {
+            regSurfaceMax = numReg.IsMatch(textBoxSurfaceMax.Text.Trim());
+        }
+        else
+        {
+            regSurfaceMax = true; // si la text box est vide on effectue qd meme la recherche
+        }
+
+        if (TextBoxBudgetMin.Text.Trim() != "")
+        {
+            regBudgetMin = numReg.IsMatch(TextBoxBudgetMin.Text.Trim());
+        }
+        else regBudgetMin = true; // si la text box est vide on effectue qd meme la recherche
+
+        if (TextBoxBudgetMax.Text.Trim() != "")
+        {
+            regBudgetMax = numReg.IsMatch(TextBoxBudgetMax.Text.Trim());
+        }
+        else regBudgetMax = true; // si la text box est vide on effectue qd meme la recherche
+
+
+
+        /// affichage des erreurs de saisie dans le label 1
+        //Label1.Text = "";
+        if (regSurfaceMin == false || regSurfaceMax == false || regBudgetMin == false || regBudgetMax == false)
+        {
+            LabelErrorLogin.Visible = true;
+            LabelErrorLogin.Text = "erreur de saisie, veuillez resaisir les critères de votre recherche";
+        }
+
+        if ((maRecher.VILLE1_REG == false ) && (ville1.Length != 0 ))
+        {
+            LabelErrorLogin.Visible = true;
+            LabelErrorLogin.Text = "erreur de saisie, veuillez resaisir les critères de votre recherche";
+        }
+
+        if (maRecher.PRIXMAX < maRecher.PRIXMIN)
+        {
+            regSurfaceMin = false;
+            LabelErrorLogin.Visible = true;
+            LabelErrorLogin.Text = "erreur de saisie, veuillez resaisir les critères de votre recherche";
+        }
+
+        if (maRecher.SURFACEMAX < maRecher.SURFACEMIN)
+        {
+            regSurfaceMin = false;
+            LabelErrorLogin.Visible = true;
+            LabelErrorLogin.Text = "erreur de saisie, veuillez resaisir les critères de votre recherche";
+        }
+
+        if (regSurfaceMin == true && regSurfaceMax == true && (maRecher.VILLE1_REG == false && regBudgetMin == true && regBudgetMax == true))
+            maRecher.RECHERCHE_OK = true;
+
+        ///Si tout est OK alors maRecherche.RECHERCHE_OK =true -----> permet d'executer la requete
+        else if (regSurfaceMin == true && regSurfaceMax == true && (maRecher.VILLE1_REG == true) && regBudgetMin == true && regBudgetMax == true)
+            maRecher.RECHERCHE_OK = true;
+        else maRecher.RECHERCHE_OK = false;
+
+        return maRecher;
+    }
+
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+
+        RequeteBien recherche = new RequeteBien();
+
+        if (TextBoxBudgetMin.Text == "") recherche.PRIXMIN = 0;
+        if (TextBoxBudgetMax.Text == "") recherche.PRIXMAX = 1000000000;
+        if (textBoxSurfaceMin.Text == "") recherche.SURFACEMIN = 0;
+        if (textBoxSurfaceMax.Text == "") recherche.SURFACEMAX = 9999999;
+        
+        if (verifChampSaisi(recherche).RECHERCHE_OK == true)
+        {
+
+            if (TextBoxBudgetMin.Text != "") recherche.PRIXMIN = Int64.Parse(TextBoxBudgetMin.Text.Trim());
+            if (TextBoxBudgetMax.Text != "") recherche.PRIXMAX = Int64.Parse(TextBoxBudgetMax.Text.Trim());
+            if (textBoxSurfaceMin.Text != "") recherche.SURFACEMIN = Int64.Parse(textBoxSurfaceMin.Text.Trim());
+            if (textBoxSurfaceMax.Text != "") recherche.SURFACEMAX = Int64.Parse(textBoxSurfaceMax.Text.Trim());
+           
+            recherche.MOTCLE1 = textBoxMotCle1.Text.Trim();
+            recherche.MOTCLE2 = textBoxMotCle2.Text.Trim();
+            recherche.MOTCLE3 = textBoxMotCle3.Text.Trim();
+            recherche.MOTCLE4 = textBoxMotCle4.Text.Trim();
+
+            recherche.VILLE1 = textBoxVille1.Text.Trim();
+            recherche.villepostal= new List<string>(textBoxVille1.Text.Split(' '));
+
+            recherche.PIECE1 = checkBoxPiece1.Checked;
+            recherche.PIECE2 = checkBoxPiece2.Checked;
+            recherche.PIECE3 = checkBoxPiece3.Checked;
+            recherche.PIECE4 = checkBoxPiece4.Checked;
+            recherche.PIECE5 = checkBoxPiece5.Checked;
+
+            if (checkBoxAppart.Checked == false && checkBoxTerrain.Checked == false && checkBoxMaison.Checked == false && checkBoxAutre.Checked == false)
+            {
+                recherche.TYPEBIEN = "AMTX";
+            }
+            else
+            {
+                if (checkBoxAppart.Checked) recherche.TYPEBIEN += "A";
+                if (checkBoxMaison.Checked) recherche.TYPEBIEN += "M";
+                if (checkBoxTerrain.Checked) recherche.TYPEBIEN += "T";
+                if (checkBoxAutre.Checked) recherche.TYPEBIEN += "X";
+            }
+
+            if (radioButtonAchat.Checked)
+            {
+                recherche.TYPEVENTE = "V";
+            }
+            else
+            {
+                recherche.TYPEVENTE = "L";
+            }
+
+            //sauvegarde l'objet recherche dans la session
+
+            Session["requete"] = recherche;
+
+            if (radioButtonAchat.Checked == true)
+            {
+                Session["Transaction"] = "achat";
+            }
+            else
+            {
+                Session["Transaction"] = "location";
+            }
+
+            Session["Smin"] = textBoxSurfaceMin.Text;
+            Session["Smax"] = textBoxSurfaceMax.Text;
+            Session["Localisation"] = textBoxVille1.Text;
+
+            Session["radioButtonAchat"] = radioButtonAchat.Checked;
+            Session["checkBoxPiece1"] = checkBoxPiece1.Checked;
+            Session["checkBoxPiece2"] = checkBoxPiece2.Checked;
+            Session["checkBoxPiece3"] = checkBoxPiece3.Checked;
+            Session["checkBoxPiece4"] = checkBoxPiece4.Checked;
+            Session["checkBoxPiece5"] = checkBoxPiece5.Checked;
+
+            Session["checkBoxMaison"] = checkBoxMaison.Checked;
+            Session["checkBoxAppart"] = checkBoxAppart.Checked;
+            Session["checkBoxTerrain"] = checkBoxTerrain.Checked;
+            Session["checkBoxAutre"] = checkBoxAutre.Checked;
+
+			Session["textBoxMotCle1"] = textBoxMotCle1.Text;
+			Session["textBoxMotCle2"] = textBoxMotCle2.Text;
+			Session["textBoxMotCle3"] = textBoxMotCle3.Text;
+			Session["textBoxMotCle4"] = textBoxMotCle4.Text;
+
+			Session["TextBoxBudgetMax"] = TextBoxBudgetMax.Text;
+			Session["TextBoxBudgetMin"] = TextBoxBudgetMin.Text;
+			
+            Response.Redirect("./affichagerecherche.aspx?Numpage=" + 1 + "&Tri=" + Session["Tri"] + "&Ordre=" + Session["Ordre"] + "&nbannonces=" + Session["annoncesPage"]);
+        }
+    }
+
+    private void initSession()
+    {
+        Session["checkBoxMaison"] = false;
+        Session["checkBoxAppart"] = false;
+        Session["checkBoxTerrain"] = false;
+        Session["checkBoxAutre"] = false;
+    }
+
+    //protected void ButtonOpenSession_Click(object sender, EventArgs e)
+    //{
+    //    Membre member = checkField();
+
+    //    if (member != null)
+    //    {
+    //        Session["membre"] = member;
+    //        Session["logged"] = true;
+    //        Response.Redirect("./recherche.aspx");
+    //    }
+
+    //}
+
+    //private Membre checkField()
+    //{
+    //    Regex regEmail = new Regex(@"^([\w\-.]+)@([a-zA-Z0-9\-.]+)$");
+    //    Boolean boolMail = false;
+    //    Membre member = null;
+    //    Boolean retour = false;
+
+    //    Label2.Visible = false;
+    //    Label2.Text = "";
+
+    //    boolMail = regEmail.IsMatch(TextBoxEmail.Text.Trim());
+
+    //    try
+    //    {
+    //        if (boolMail) member = MembreDAO.getMember(TextBoxEmail.Text.Trim());
+    //        else
+    //        {
+    //            Label2.Visible = true;
+    //            Label2.Text = "Saisie incorrect<br />";
+    //        }
+    //        if (member == null && boolMail == true)
+    //        {
+    //            Label2.Visible = true;
+    //            Label2.Text = "Saisie incorrect<br />";
+    //        }
+    //    }
+    //    catch
+    //    {
+    //        Label2.Visible = true;
+    //        Label2.Text = "Erreur<br />";
+    //    }
+
+    //    try
+    //    {
+    //        if (member != null && member.PASSWORD == TextBoxPassword.Text)
+    //        {
+    //            Session["logged"] = true;
+    //        }
+    //        else if (member != null)
+    //        {
+    //            Label2.Text += "Saisie incorrect<br />";
+    //            Label2.Visible = true;
+    //            member = null;
+    //        }
+    //    }
+    //    catch
+    //    {
+    //        Label2.Text += "Saisie incorrect<br />";
+    //        Label2.Visible = true;
+    //        member = null;
+    //    }
+
+    //    return member;
+    //}
+
+    protected void Button2_Click(object sender, EventArgs e)
+    {
+        
+        checkBoxPiece1.Checked = true;
+        checkBoxPiece2.Checked = true;
+        checkBoxPiece3.Checked = true;
+        checkBoxPiece4.Checked = true;
+        checkBoxPiece5.Checked = true;
+        radioButtonLocation.Checked = false;
+        radioButtonAchat.Checked = true;
+        textBoxMotCle1.Text = "";
+        textBoxMotCle2.Text = "";
+        textBoxMotCle3.Text = "";
+        textBoxMotCle4.Text = "";
+        textBoxSurfaceMax.Text = "";
+        textBoxSurfaceMin.Text = "";
+        textBoxVille1.Text = "";
+        TextBoxBudgetMax.Text = "";
+        TextBoxBudgetMin.Text = "";
+		
+		Session["Transaction"] = "achat";
+        Session["Smin"] = "";
+        Session["Smax"] = "";
+        Session["Localisation"] = "";
+        Session["lareferance"] = "";
+        Session["leTelVendeur"] = "";
+        Session["NomVendeur"] = "";
+        Session["textBoxAdresseBien"] = "";
+        Session["textBoxMotCle1"] = " ";
+        Session["textBoxMotCle2"] = "";
+        Session["textBoxMotCle3"] = "";
+        Session["textBoxMotCle4"] = "";
+        Session["TextBoxMailVendeur"] = "";
+        Session["TextBoxBudgetMin"] = "";
+        Session["TextBoxBudgetMax"] = "";
+        Session["Smax"] = "";
+        Session["Smin"] = "";
+        Session["TextBoxSurfaceSMin"] = "";
+        Session["TextBoxSurfaceSMax"] = "";
+        Session["textBoxSurfaceTMin"] = "";
+        Session["textBoxSurfaceTMax"] = "";
+		
+		Session["Smin"] = textBoxSurfaceMin.Text;
+        Session["Smax"] = textBoxSurfaceMax.Text;
+        Session["Localisation"] = textBoxVille1.Text;
+		
+		radioButtonAchat.Checked = true;
+        radioButtonLocation.Checked = false;
+        
+		
+        checkBoxMaison.Checked = true;
+        checkBoxAppart.Checked = true;
+        checkBoxTerrain.Checked = false;
+        checkBoxAutre.Checked = false;
+		Session["checkBoxAppart"] = true;
+        Session["checkBoxMaison"] = false;
+        Session["checkBoxTerrain"] = false;
+        Session["checkBoxAutre"] = false;
+		
+		
+
+        textBoxMotCle1.Text = "";
+        textBoxMotCle2.Text = "";
+        textBoxMotCle3.Text = "";
+        textBoxMotCle4.Text = "";
+        TextBoxBudgetMin.Text = "";
+        TextBoxBudgetMax.Text = "";
+        textBoxSurfaceMin.Text = "";
+        textBoxSurfaceMax.Text = "";
+    }
+
+    protected void Button3_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("./inscription.aspx");
+    }
+
+    protected void Button4_Click(object sender, EventArgs e)
+    {
+        if (Session["logged"].Equals(true))
+        {
+            Session.Abandon();
+            Response.Redirect("./recherche.aspx");
+        }
+    }
+
+    protected void Button5_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("./moncomteCoordonnees.aspx");
+    }
+
+  
+
+
+    
+    // show textbox
+    [System.Web.Script.Services.ScriptMethod()]
+    [System.Web.Services.WebMethod]
+    public static List<string> SearchVilles(string prefixText, int count)
+    {
+        using (OdbcConnection conn = new OdbcConnection())
+        {
+            conn.ConnectionString = ConfigurationManager
+                    .ConnectionStrings["ConnectionString"].ConnectionString;
+            using (OdbcCommand cmd = new OdbcCommand())
+            {
+                string cmdText = "select distinct top 10 [Code Postal] from Ville where [Code Postal] like '" +
+                prefixText + "%'";
+                //cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                //if (contextKey != "0")
+                //{
+                //    cmdText += " and Country = @Country";
+                //    cmd.Parameters.AddWithValue("@Country", contextKey);
+                //}
+                cmd.CommandText = cmdText;
+                cmd.Connection = conn;
+                conn.Open();
+                List<string> Villes = new List<string>();
+                using (OdbcDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        Villes.Add(sdr["Code Postal"].ToString());
+                    }
+                }
+                conn.Close();
+                return Villes;
+            }
+        }
+    }
+
+
+}
+
+
+#endregion
