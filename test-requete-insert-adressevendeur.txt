@@ -1,0 +1,29 @@
+﻿ INSERT INTO Biens (`code_client`,`actif`,`ref`,`num`,`type de bien`,`etat`,`negociateur`,`idclient`,`prix de vente`,`net vendeur`,`honoraires`,`prix estimé`,`travaux`,`taxe fonciere`,`taxe habitation`,`charges`,`etat civil vendeur`,`nom vendeur`,`prenom vendeur`,
+
+`adresse vendeur`,
+`code postal vendeur`,
+`ville vendeur`,
+`pays vendeur`,
+
+`tel domicile vendeur`,`tel bureau vendeur`,`adresse mail vendeur`,`num_mandat`,`type mandat`,`date dossier`,`date échéance`,`disponibilité`,`date libération`,`montant loyer`,
+
+`adresse du bien`,
+`code postal du bien`,
+`ville du bien`,
+`localisation du bien`,
+
+`categorie`,`nombre de pieces`,`nombre de chambres`,`surface habitable`,`surface carrez`,`surface séjour`,`surface terrain`,`exposition sejour`,`etage`,`code etage`,`nombre etages`,`annee construction`,`type cuisine`,`nombre wc`,`nombre salles de bain`,`nombre salles eau`,`nombre parkings interieurs`,`nombre parkings exterieurs`,`nombre garages`,`type sous-sol`,`nombre de caves`,`type chauffage`,`nature chauffage`,`ascenceur`,`balcon`,`terrasse`,`nombre de murs mitoyens`,`facade terrain`,`profondeur terrain`,`cos terrain`,`shon terrain`,`eau`,`gaz`,`electricite`,`tout egout`,`lotissement`,`num_lotissement`,`alignement`,`texte internet`,`texte commentaires`,`texte mailing`,`ref_proprio`,`residence`,`proximite`,`quartier`,`transport`,`loyer_hc`,`loyer_cc`,`depot_guarantie`,`meuble`,`lettre_conso`,`nombre_conso`,`lettre_energie`,`nombre_energie`,`nom_syndic`,`ville_syndic`,`tel_syndic`,`fax_syndic`,`numero_cles`,`texte_syndic`)
+
+values('patrimonium','actif','V0013590','002','A','Estimation','raphael blemus','138','120000','0','0','0','0','','','','','','',
+
+'2234 jfeok',
+'92450',
+'COURBevoie',
+
+'','','','','162','Simple','03/06/2013 00:00:00','00:00:00','','00:00:00','0',
+
+'FEFFEF',
+'92200',
+'NEUILLY',
+
+'','','0','0','70','0','0','0','','0','0','0','','','','','','','','','','','','','NON','NON','NON','','','','','','NON','NON','NON','NON','NON','','NON','','','','','','','','','0','0','0','NON','','0','','0','','','','','0','')

@@ -1,0 +1,1 @@
+SELECT Biens.*, Biens.etat, Biens.[type de bien], Biens.[nombre de pieces] FROM Biens WHERE (((Biens.etat)='Disponible') AND ((Biens.[type de bien])='A') AND ((Biens.[nombre de pieces])=3))

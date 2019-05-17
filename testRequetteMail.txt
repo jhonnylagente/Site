@@ -1,0 +1,1 @@
+INSERT INTO HistoriqueMail (dateEnvoie,compteSource,IPSource,TypeMail,destinataire,referenceBien,contenu) VALUES ( ?, ?, ?, ?, ?, ?, ?); 

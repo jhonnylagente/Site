@@ -1,0 +1,1 @@
+SELECT Acquereurs.* FROM Acquereurs where 1 AND appartement = true AND actif = "actif" AND type_acquereur ='Acheteur' AND ( code_postal_cible = '92700' OR code_postal_cible = '' ) AND ( ville_cible = 'COLOMBES' OR ville_cible = '' ) AND ( surface_habitable <= 66 OR surface_habitable = 0 ) AND ( prix_max >= 415000 OR prix_max = 0 ) ORDER by prix_max desc ;
