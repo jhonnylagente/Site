@@ -1,0 +1,47 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="caculatedistance.aspx.cs"
+    Inherits="pages_caculatedistance" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+   
+<body onload="initialize()">
+ <form id="form2" runat="server">
+
+    <div id="inputs">
+        <pre class="prettyprint">
+<%--var origin1 = new google.maps.LatLng(55.930385, -3.118425);
+var origin2 = "Greenwich, England";
+var destinationA = "Stockholm, Sweden";
+var destinationB = new google.maps.LatLng(50.087692, 14.421150);--%>
+      </pre>
+
+    <div id="outputDiv">
+    </div>
+    <div id="map">
+    </div>
+
+     <div>
+        <% 
+            Connexion c = new Connexion(System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString);
+            c.Open();
+            System.Data.DataSet dsdistance = c.exeRequette("SELECT *  from Distances");
+            //        System.Data.DataSet villedb = c.exeRequette("Select * from  longitude_radian, latitude_radian, ville_nom,");
+            System.Data.DataSet villeinput = c.exeRequette("Select * from  Distances WHERE Nom='Paris' ");
+            System.Data.DataSet villeinput2 = c.exeRequette("Select * from  Distances WHERE Nom='Toulouse' ");
+            c.Close();
+
+            double villeinputla = (double)villeinput.Tables[0].Rows[0]["Latitude"];
+            double villeinputlo = (double)villeinput.Tables[0].Rows[0]["Longitude"]; 
+            double villeinputla2 = (double)villeinput2.Tables[0].Rows[0]["Latitude"];
+            double villeinputlo2 = (double)villeinput2.Tables[0].Rows[0]["Longitude"];
+
+
+
+            Response.Write(pages_caculatedistance.CDistanceBetweenLocations.Calc(villeinputla, villeinputlo, villeinputla2, villeinputlo2));
+	
+        %> 
+    </form>
+
+</body>
+</html>

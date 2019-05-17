@@ -1,0 +1,227 @@
+﻿<%@ Page Language="C#" MasterPageFile="~/pages/MasterPage.master" AutoEventWireup="true" CodeFile="ajout_visite.aspx.cs" Inherits="pages_ajout_visite" Title="PATRIMONIUM : Mon espace client" %>
+
+
+<asp:Content ID="Content1" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
+
+<% 
+// Message d'acquisition de la visite
+if (Request.Params["valid"] == "oui")
+{
+    LabelVisite.Visible = true;
+    LabelVisite.Text = "Félicitations !!!";
+}
+
+%>
+
+<table class="moncompte" >
+    <tr>   
+        <td class="moncompteG1">
+            <b>Visites</b>
+        </td>
+           
+        <td class="moncompteD1">                                   
+            <strong>Bienvenue
+            <asp:Label ID="LabelPrenom" runat="server" Text="LabelPrenom"></asp:Label>&nbsp
+            <asp:Label ID="LabelNom" runat="server" Text="LabelNom"></asp:Label></strong> 
+            <asp:Label ID="LabelVisite" runat="server" Font-Bold="True" class="rouge" Visible="False" ></asp:Label>                                
+        </td>        
+    </tr>
+    
+    <tr >
+        <td class="moncompteG">
+            <% Membre member = (Membre)Session["Membre"];%>
+            <!-- Menu de liens à gauche -->
+            <!--#include file="./menumoncompte.aspx"-->            
+        </td>
+        <td  class="moncompteD"> 
+            <%
+Response.Write("Vous souhaitez faire visiter <br />");
+if (Session["ref_sel"] != null)
+{
+    Response.Write(Session["ref_sel"]);
+    string Ref = (string)Session["ref_sel"];
+    string[] WordArray;
+    string[] stringSeparators = new string[] { ";" };
+    WordArray = Ref.Split(stringSeparators, StringSplitOptions.None);
+    int i = 0;
+    if (WordArray.Length >= 1)
+    {
+        while (i < WordArray.Length)
+        {
+            String requette = "select ref, `prix de vente`, `ville du bien`, `surface habitable` from biens where `ref`='" + WordArray[i] + "'";
+            System.Data.DataSet ds = null;
+            Connexion c = null;
+
+            c = new Connexion(System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString);
+            c.Open();
+            ds = c.exeRequette(requette);
+            c.Close();
+            c = null;
+
+            System.Data.DataRowCollection dr = ds.Tables[0].Rows;
+            foreach (System.Data.DataRow ligne in dr)
+            {
+                Response.Write(ligne["ref"].ToString() + " - " + ligne["prix de vente"].ToString() + "€" + " - " + ligne["ville du bien"].ToString() + " - " + ligne["surface habitable"].ToString() + " m2" + " <br/>");
+            }
+            i++;
+        }
+    }
+}
+            %>
+               
+               <asp:DropDownList ID="DropDownListBiens" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ItemChange">
+                  <asp:ListItem></asp:ListItem>
+               </asp:DropDownList>  
+               
+            <% Response.Write("<br/> à <br/>");%>
+            
+                <asp:DropDownList ID="DropDownListAcquereurs" runat="server" AutoPostBack="true" OnSelectedIndexChanged="ItemChange2">
+                  <asp:ListItem></asp:ListItem>
+               </asp:DropDownList> 
+               
+               <br />
+               <asp:CheckBox ID="CheckBoxEnregistrer" runat="server" Text="Enregistrer ma visite" /> <br />          
+               <asp:Button ID="ButtonImpressionBon" runat="server" Text="Générer un bon de visite" OnClick="ButtonImpressionBon_Click1"/>
+               
+     <%
+     if (Session["ref_sel"] != null)
+{
+    Response.Write(Session["ref_sel"]);
+     }
+     %>
+                         
+     
+           <h3> CheckBoxList Constructor Example </h3>
+
+      Select items from the CheckBoxList.
+
+      <br><br>
+
+      
+     
+     
+     
+     
+
+      <asp:label id="Message" runat="server"/>
+     
+     
+     
+     
+     
+     
+     
+     <!-- aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa -->
+     
+     
+     
+     
+     
+     
+     <div class="choix_bien_visite">
+     
+     
+
+            <%  
+     
+String MailNego = member.ID_CLIENT;
+if (member.STATUT == "nego")
+{
+            %>
+            <a href="./ajout_nego.aspx" style="cursor: hand"><img src='../img_site/fleche2.ico' border='0' width='15px' height='13px'> Ajout d'une vente</a>
+            <% } %>
+       
+       
+ 
+            <table class="tableaubilan">
+                <tr class="champs">
+                    <td><Strong>Références</Strong> </td>
+                    <td><Strong>Date de dossier</Strong></td>
+                    <td><Strong>Type de transaction</Strong></td>
+                    <td><Strong>Type de bien</Strong></td>                
+                    <td><Strong>Code postal</Strong></td>
+                    <td><Strong>Ville</Strong></td>
+                    <td><Strong>Prix de vente</Strong></td>
+                    <td><Strong>Nombre de pièces</Strong></td>
+                    <td><Strong>Surface</Strong></td>
+                    <td><Strong>Visiter</Strong></td>
+                    <td><Strong>Supprimer</Strong></td>
+                </tr>
+              
+        
+        <%
+int j = 0;
+// String requette2 = "Select * From Biens where `negociateur`='OLIVIER SAGLIO'";
+String requette2 = "SELECT Clients.id_client, Clients.prenom_client, Clients.nom_client FROM Biens LEFT JOIN Clients ON Biens.idclient = Clients.idclient GROUP BY Clients.id_client;
+System.Data.DataSet ds2 = null;
+; Connexion c2 = null;
+
+c2 = new Connexion(System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString);
+c2.Open();
+ds2 = c2.exeRequette(requette2);
+c2.Close();
+c2 = null;
+
+System.Data.DataRowCollection dr2 = ds2.Tables[0].Rows;
+            
+          %>  
+              
+    <%
+              
+               
+              
+foreach (System.Data.DataRow ligne in dr2)
+{
+    if ((j % 2) == 1) Response.Write("<tr class=\"pair\">");
+    else Response.Write("<tr>");
+    j++;
+    Response.Write("<td>"); Response.Write((String)ligne["ref"]); Response.Write("</td>");
+
+    Response.Write("<td>"); Response.Write((String)ligne["date dossier"].ToString().Substring(0, 10)); Response.Write("</td>");
+
+    Response.Write("<td>"); if ((String)ligne["ref"].ToString().Substring(0, 1) == "L") Response.Write("Location");
+    else if ((String)ligne["ref"].ToString().Substring(0, 1) == "V") Response.Write("Vente");
+    Response.Write("</td>");
+
+    Response.Write("<td>"); if ((String)ligne["type de bien"].ToString().Substring(0, 1) == "M") Response.Write("Maison");
+    else if ((String)ligne["type de bien"].ToString().Substring(0, 1) == "A") Response.Write("Appartement");
+    else if ((String)ligne["type de bien"].ToString().Substring(0, 1) == "L") Response.Write("Loft");
+    else if ((String)ligne["type de bien"].ToString().Substring(0, 1) == "T") Response.Write("Terrain");
+    Response.Write("</td>");
+
+    Response.Write("<td class=\"centre\">"); Response.Write(ligne["code postal du bien"]); Response.Write("</td>");
+    Response.Write("<td>"); Response.Write((String)ligne["ville du bien"]); Response.Write("</td>");
+    Response.Write("<td class=\"droite\">"); Response.Write((int)ligne["prix de vente"] + "€"); Response.Write("</td>");
+    Response.Write("<td class=\"centre\">"); Response.Write(ligne["nombre de pieces"]); Response.Write("</td>");
+    Response.Write("<td class=\"centre\">"); Response.Write(ligne["Surface habitable"] + " m²"); Response.Write("</td>");
+
+    Response.Write("<td>");
+    Response.Write("</td>");
+    Response.Write("<td>");
+         Place.ID=Place + (String)ligne["ref"].ToString();%>  
+  
+
+
+
+              
+                 <%
+Response.Write("</td>");
+
+}  %>
+
+       <asp:PlaceHolder id="Place" runat="server"/>
+                                
+
+   
+     
+     
+     </div>
+     
+          <!-- aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa -->     
+          
+        </td>
+    </tr>
+</table>
+   
+</asp:Content>
+

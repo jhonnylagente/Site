@@ -1,0 +1,30 @@
+protected void CalculRapprochement(object sender, EventArgs e)
+    {
+		int i=0;
+		CheckBox CheckBoxSelect = (CheckBox)sender;
+		if (CheckBoxSelect.Checked)
+		{
+			List<string> list = new List<string>();
+			if (ViewState["SelectedRecordsA"] != null)
+			{
+				list = (List<string>)ViewState["SelectedRecordsA"];
+			}
+			foreach (GridViewRow row in GridViewAcq.Rows)
+			{
+				CheckBox check = (CheckBox)row.FindControl("CheckBoxArchiver");
+				var selectedKey = GridViewAcq.DataKeys[row.RowIndex].Value.ToString();
+				if (check.Checked)
+				{
+					Response.Redirect("./rapprochement.aspx?idmandatRecherche=" + Session["CB_BT"] + "");
+					Response.Write
+					("<script language=javascript> window.open( './rapprochement.aspx?idmandatRecherche=" + Session["CB_BT"] + "'); </script> ");
+				}
+			}
+			
+		}
+		else
+		{
+			LabelErrorLogin.Visible = true;
+			LabelErrorLogin.Text = "veuillez sélectionnez un acquéreur grâce aux checkbox";
+		}
+    }

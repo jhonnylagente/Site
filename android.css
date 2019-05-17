@@ -1,0 +1,24 @@
+.Header
+{ 	
+    width : 100%;
+}
+
+
+#grosseImage
+{
+	width: 100%;
+	display: block;
+	margin-left: auto;
+    margin-right: auto;
+}
+
+.bloc_fichedetail
+{
+	margin-left: 2%;
+	margin-right: 2%;
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}

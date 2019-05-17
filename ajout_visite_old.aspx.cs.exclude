@@ -1,0 +1,300 @@
+﻿
+using System;
+using System.Data;
+using System.Configuration;
+using System.Collections;
+using System.Web;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
+using System.Web.UI.HtmlControls;
+using System.Text.RegularExpressions;
+
+
+/// <summary>
+/// Description résumée de Class1
+/// </summary>
+public partial class pages_ajout_visite : System.Web.UI.Page
+{
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        ((Label)Page.Master.FindControl("titrebandeau")).Text = "Mon espace";
+        Membre member1 = (Membre)Session["Membre"];
+        String MailNego = member1.ID_CLIENT;
+
+        // Create a new CheckBoxList control.
+        CheckBoxList checklist = new CheckBoxList();
+
+        // Set the properties of the control.
+        checklist.ID = "checkboxlist1";
+        checklist.AutoPostBack = true;
+        checklist.CellPadding = 5;
+        checklist.CellSpacing = 5;
+        checklist.RepeatColumns = 1;
+        checklist.RepeatDirection = RepeatDirection.Vertical;
+        checklist.RepeatLayout = RepeatLayout.Flow;
+        checklist.TextAlign = TextAlign.Right;
+
+
+
+        String requette2 = "SELECT Clients.id_client, Clients.prenom_client, Clients.nom_client FROM Biens LEFT JOIN Clients ON Biens.idclient = Clients.idclient GROUP BY Clients.id_client";
+System.Data.DataSet ds2 = null;
+; Connexion c2 = null;
+
+c2 = new Connexion(System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString);
+c2.Open();
+ds2 = c2.exeRequette(requette2);
+c2.Close();
+c2 = null;
+
+System.Data.DataRowCollection dr2 = ds2.Tables[0].Rows;
+            
+ 
+              
+               
+              
+foreach (System.Data.DataRow ligne in dr2)
+{
+        // Populate the CheckBoxList control.
+        checklist.Items.Add(new ListItem((String)ligne["ref"].ToString()));
+}
+
+        // Manually register the event-handling method for the 
+        // SelectedIndexChanged event.
+        checklist.SelectedIndexChanged += new EventHandler(this.Check_Clicked);
+
+        // Add the control to the Controls collection of the 
+        // PlaceHolder control.
+        Place.Controls.Add(checklist);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        if (Session["logged"].Equals(true))
+        {
+            // permet le "Bonjour Mr X"
+            Membre member = (Membre)Session["Membre"];
+            LabelPrenom.Text = member.CIVILITE;
+            LabelNom.Text = member.NOM;
+        }
+        else
+        {
+            Response.Redirect("./recherche.aspx");
+        }
+
+        if (!Page.IsPostBack)
+        {
+            Session["ref_sel"] = "";
+
+            #region Peuplement de la DropDownListBiens
+            //Peuplement des DropdownList à partir de la table table_types
+            String requette = "select ref, `prix de vente`, `ville du bien`, `surface habitable` from biens ORDER BY `prix de vente` ASC";
+            System.Data.DataSet ds = null;
+            Connexion c = null;
+
+            c = new Connexion(System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString);
+            c.Open();
+            ds = c.exeRequette(requette);
+            c.Close();
+            c = null;
+
+            System.Data.DataRowCollection dr = ds.Tables[0].Rows;
+            foreach (System.Data.DataRow ligne in dr)
+            {
+                if (ligne["ref"].ToString() != "null")
+                {
+                    if (ligne["ville du bien"].ToString().Length > 15)
+                    {
+                        DropDownListBiens.Items.Add(new ListItem(ligne["ref"].ToString() + " - " + ligne["prix de vente"].ToString() + "€" + " - " + ligne["ville du bien"].ToString().Substring(0, 15) + " - " + ligne["surface habitable"].ToString() + " m²", ligne["ref"].ToString()));
+                    }
+                    else
+                    {
+                        DropDownListBiens.Items.Add(new ListItem(ligne["ref"].ToString() + " - " + ligne["prix de vente"].ToString() + "€" + " - " + ligne["ville du bien"].ToString() + " - " + ligne["surface habitable"].ToString() + " m²", ligne["ref"].ToString()));
+                    }
+                }
+
+
+            }
+            #endregion
+
+            #region Peuplement de DropDownListAcquereurs
+            //Peuplement des DropdownList à partir de la table table_types
+            requette = "select `nom`, `prenom` from Acquereurs";
+
+
+            c = new Connexion(System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString);
+            c.Open();
+            ds = c.exeRequette(requette);
+            c.Close();
+            c = null;
+
+            dr = ds.Tables[0].Rows;
+            foreach (System.Data.DataRow ligne in dr)
+            {
+                if (ligne["nom"].ToString() != "null")
+                {
+                    DropDownListAcquereurs.Items.Add(new ListItem(ligne["prenom"].ToString() + " " + ligne["nom"].ToString(), ligne["prenom"].ToString() + " " + ligne["nom"].ToString()));
+                }
+
+
+            }
+            #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }
+
+    }
+
+    protected void ItemChange(object sender, EventArgs e)
+    {
+        if (Session["ref_sel"] != null)
+        {
+            Session["ref_sel"] = Session["ref_sel"] + ";" + (((DropDownList)sender).SelectedValue).ToString();
+        }
+        else
+        {
+            Session["ref_sel"] = (((DropDownList)sender).SelectedValue).ToString();
+        }
+    }
+
+    protected void ItemChange2(object sender, EventArgs e)
+    {
+            Session["acq_sel"] = (((DropDownList)sender).SelectedValue).ToString();
+    }
+
+
+    protected void ButtonImpressionBon_Click1(object sender, EventArgs e)
+    {
+        string requete = "";
+        if (Session["logged"].Equals(true))
+        {
+            // permet le "Bonjour Mr X"
+            Membre member = (Membre)Session["Membre"];
+            LabelPrenom.Text = member.CIVILITE;
+            LabelNom.Text = member.NOM;
+        }
+        else
+        {
+            Response.Redirect("./recherche.aspx");
+        }
+        if (CheckBoxEnregistrer.Checked)
+        {
+            if (Session["ref_sel"] != null)
+            {
+                string Ref = (string)Session["ref_sel"];
+                string[] WordArray;
+                string[] stringSeparators = new string[] { ";" };
+                WordArray = Ref.Split(stringSeparators, StringSplitOptions.None);
+                int i = 0;
+                if (WordArray.Length >= 1)
+                {
+                    while (i < WordArray.Length)
+                    {
+                        requete = " INSERT INTO visite("
+                        + "`id_bien`,"
+                        + "`acquereur`,"
+                        + "`negociateur`,"
+                        + "`actif`,"
+                        + "`date_visite`)"
+                        + "values('" +WordArray[i]+"','"
+                        + DropDownListAcquereurs.SelectedValue + "','"
+                        + member.PRENOM + " " + member.NOM + "','"
+                        + "actif" + "','"
+                        + DateTime.Now.ToString() + "'"
+                        + ")";
+
+
+                        System.Data.DataSet ds = null;
+                        Connexion c = null;
+
+                        c = new Connexion(System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString);
+                        c.Open();
+                        ds = c.exeRequette(requete);
+                        c.Close();
+                        c = null;
+                        i++;
+                    }
+                }
+                
+            }
+
+        }
+        
+
+        //Response.Redirect("./ajout_visite.aspx?valid=oui");
+        Response.Redirect("./bon_de_visite.aspx");
+    }
+
+    protected void Check_Clicked2(object sender, EventArgs e)
+    {
+        Session["ref_sel"]="CheckBox" + ((CheckBox)sender).Text;
+        LabelNom.Text = "checkbox changed";
+        //((CheckBox)sender).Checked = false;
+        //Response.Redirect("http://www.google.fr");
+    }
+
+    protected void Check_Clicked(Object sender, EventArgs e)
+    {
+
+        // Retrieve the CheckBoxList control from the Controls collection
+        // of the PlaceHolder control.
+        CheckBoxList checklist =
+            (CheckBoxList)Place.FindControl("checkboxlist1");
+
+        // Make sure a control was found.
+        if (checklist != null)
+        {
+
+            Message.Text = "Selected Item(s):<br><br>";
+
+            // Iterate through the Items collection of the CheckBoxList 
+            // control and display the selected items.
+            for (int i = 0; i < checklist.Items.Count; i++)
+            {
+
+                if (checklist.Items[i].Selected)
+                {
+
+                    Message.Text += checklist.Items[i].Text + "<br>";
+
+                }
+
+            }
+
+        }
+
+        else
+        {
+
+            // Display an error message.
+            Message.Text = "Unable to find CheckBoxList control.";
+
+        }
+
+
+    }
+
+}

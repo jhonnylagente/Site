@@ -1,0 +1,401 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Text.RegularExpressions;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Data.Odbc;
+using System.Collections.Generic;
+using GestionEmplacement;
+using System.Data;
+
+public partial class pages_controlModifierAcquereur : System.Web.UI.UserControl
+{
+    //liste affiché sur le navigateur
+    //liste generer a partir de emplacementAffiché a qui on retire les elements de la liste noire
+    //cette liste affiché dans option avancé
+    //permet de generer string a mettre dans les filtres de la base de donnée
+    //peut etre importée a partir d un fichier(contenant la dite string)
+    public ListeEmplacementRecherche listeVilleRecherche = new ListeEmplacementRecherche();
+    public ListeEmplacementRecherche listeNoire = new ListeEmplacementRecherche();
+    public List<Arrondissement> listeArrondissementNoire = new List<Arrondissement>();
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        
+    }
+
+    protected void Page_PreRender()
+    {
+        if (listeNoire != null) Session["listeNoire"] = listeNoire;
+        if (listeArrondissementNoire != null) Session["listeArrondissementNoire"] = listeArrondissementNoire;
+    }
+
+    protected void Page_Init(object sender, EventArgs e)
+    {
+       
+        if (Session["listeNoire"] != null) listeNoire = (ListeEmplacementRecherche)Session["listeNoire"];
+        if (Session["listeArrondissementNoire"] != null) listeArrondissementNoire = (List<Arrondissement>)Session["listeArrondissementNoire"];
+
+    }
+
+    protected void UpdatePanel1_Init(object sender, EventArgs e)
+    {
+        
+    }
+
+    protected void UpdatePanel1_Load(object sender, EventArgs e)
+    {
+        rafraichirEmplacementAffiche();
+    }
+    
+    protected void rafraichirEmplacementAffiche()
+    {
+        rafraichirListeEmplacementRecherche();
+    }
+
+    protected void rafraichirListeEmplacementRecherche()
+    {
+        Connexion c = new Connexion();
+        if (listeVilleRecherche != null) listeVilleRecherche.Clear();
+        if (emplacementAffiche != null)
+        {
+            foreach (Emplacement lieu in emplacementAffiche)
+            {
+                if (lieu.Dep == false)
+                {
+                    List<Ville> listeINSEE = PATRIMO.Outils.OutilsDistance.villeINSEEListeDistance(lieu.CodeINSEE, lieu.Distance);
+                    foreach (Ville ville in listeINSEE)
+                    {
+                        bool noir = false;
+                        foreach (EmplacementRecherche ER in listeNoire)
+                        {
+                            if (ER.CodeINSEE == ville.insee) noir = true;
+                        }
+                        if (noir == false)
+                        {
+                            bool hasArrondissement = false;
+                            List<Arrondissement> listeArrond = null;
+                            if (ville.cp.Length > 5)
+                            {
+                                hasArrondissement = true;
+                                listeArrond = construireListeArrond(ville.insee);
+                            }
+                            EmplacementRecherche newER = new EmplacementRecherche(false, hasArrondissement, ville.insee, ville.nom, ville.cp, listeArrond);
+                            listeVilleRecherche.Add(newER);
+                        }
+                    }
+                }
+                else
+                {
+                    EmplacementRecherche newER = new EmplacementRecherche(true, false, lieu.CodeINSEE, lieu.Nom);
+                    listeVilleRecherche.Add(newER);
+                }
+            }
+        }
+        rafraichirAffichageAvance();
+    }
+
+    protected void rafraichirAffichageAvance()
+    {
+        //affichage listeRecherche
+        TableSelectionAvance.Rows.Clear();
+        TableListeNoire.Rows.Clear();
+        if (listeVilleRecherche != null)
+        {
+            foreach (EmplacementRecherche ER in listeVilleRecherche)
+            {
+                TableRow ligne = new TableRow();
+                TableSelectionAvance.Rows.Add(ligne);
+                TableCell cell1 = new TableCell();
+                ligne.Cells.Add(cell1);
+                TableCell cell2 = new TableCell();
+                ligne.Cells.Add(cell2);
+                TableCell cell3 = new TableCell();
+                ligne.Cells.Add(cell3);
+
+                MemoryButton buttonsuppr = new MemoryButton();
+                buttonsuppr.AlternateText = "suppr ";
+                buttonsuppr.ImageUrl = @"~\img_site\boutton_Supprimer.png";
+                buttonsuppr.code = ER.CodeINSEE;
+                cell1.Controls.Add(buttonsuppr);
+                buttonsuppr.ID = "btnsupprLA" + buttonsuppr.code;
+
+                UpdatePanelControlTrigger trigger = new AsyncPostBackTrigger();
+                trigger.ControlID = buttonsuppr.ID;
+                UpdatePanel1.Triggers.Add(trigger);
+                buttonsuppr.Click += new ImageClickEventHandler(AjouterALaListeNoire);
+
+                Label labelNom = new Label();
+                labelNom.Text = ER.Nom;
+                cell2.Controls.Add(labelNom);
+
+                if (ER.HasArrondissement)
+                {
+                    foreach (Arrondissement arr in ER.ListeArrondissement)
+                    {
+                        cell3.Controls.Add(new LiteralControl("<div class=\"AjoutacquereurCellulleListeVille\">"));
+                        //le boutton supprimer
+                        MemoryButton buttonsupprArrond = new MemoryButton();
+                        cell3.Controls.Add(buttonsupprArrond);
+                        buttonsupprArrond.code = arr.CP;
+                        buttonsupprArrond.Click += new ImageClickEventHandler(ajouterArrondissementALaListeNoire);
+                        buttonsupprArrond.ID = ER.CodeINSEE + "buttonsupprArrond" + buttonsupprArrond.code;
+                        UpdatePanelControlTrigger trigg = new AsyncPostBackTrigger();
+                        trigg.ControlID = buttonsupprArrond.ID;
+                        UpdatePanel1.Triggers.Add(trigg);
+                        buttonsupprArrond.AlternateText = "suppr ";
+                        buttonsupprArrond.ImageUrl = @"~\img_site\boutton_Supprimer.png";
+
+                        //le cp
+                        Label labelCP = new Label();
+                        labelCP.Text = arr.CP;
+                        cell3.Controls.Add(labelCP);
+                        cell3.Controls.Add(new LiteralControl("</div>"));
+                    }
+                }
+                else
+                {
+                    Label labelCP = new Label();
+                    labelCP.Text = ER.CP;
+                    cell3.Controls.Add(labelCP);
+                }
+
+            }
+        }
+
+        if (listeNoire != null)
+        {
+            //affichage liste noire
+            foreach (EmplacementRecherche ER in listeNoire)
+            {
+                TableRow ligne = new TableRow();
+                TableListeNoire.Rows.Add(ligne);
+                TableCell cell1 = new TableCell();
+                ligne.Cells.Add(cell1);
+                TableCell cell2 = new TableCell();
+                ligne.Cells.Add(cell2);
+
+                MemoryButton buttonsuppr = new MemoryButton();
+                buttonsuppr.AlternateText = "suppr ";
+                buttonsuppr.ImageUrl = @"~\img_site\boutton_Supprimer.png";
+                buttonsuppr.code = ER.CodeINSEE;
+                cell1.Controls.Add(buttonsuppr);
+                buttonsuppr.ID = "btnsupprLN" + buttonsuppr.code;
+
+                UpdatePanelControlTrigger trigger = new AsyncPostBackTrigger();
+                trigger.ControlID = buttonsuppr.ID;
+                UpdatePanel1.Triggers.Add(trigger);
+                buttonsuppr.Click += new ImageClickEventHandler(RetirerDeLaListeNoire);
+
+                Label label = new Label();
+                label.Text = ER.Nom + " | " + ER.CP;
+                cell2.Controls.Add(label);
+
+            }
+        }
+    }
+
+    protected void AjouterALaListeNoire(object sender, EventArgs e)
+    {
+        string code = ((MemoryButton)sender).code;
+        EmplacementRecherche ERtrouve = null;
+
+        foreach (Emplacement empl in emplacementAffiche)
+        {
+            foreach (EmplacementRecherche emplER in empl.ListeVille)
+            {
+                if (emplER.CodeINSEE == code)
+                {
+                    empl.ListeVille.Remove(emplER);
+                    break;//unique
+                }
+            }
+        }
+        foreach (EmplacementRecherche ER in listeVilleRecherche)
+        {
+            if (ER.CodeINSEE == code)
+            {
+                ERtrouve = ER;
+                break;//unique
+            }
+        }
+        listeNoire.Add(ERtrouve);
+        listeVilleRecherche.Remove(ERtrouve);
+        rafraichirAffichageAvance();
+        rafraichirEmplacementAffiche();
+    }
+
+    protected void RetirerDeLaListeNoire(Object sender, EventArgs e)
+    {
+        string code = ((MemoryButton)sender).code;
+        EmplacementRecherche ERtrouve = null;
+
+        rechargerListeERDansEmplacement();
+
+        foreach (EmplacementRecherche ER in listeNoire)
+        {
+            if (ER.CodeINSEE == code)
+            {
+                ERtrouve = ER;
+            }
+        }
+        listeVilleRecherche.Add(ERtrouve);
+        listeNoire.Remove(ERtrouve);
+        rafraichirAffichageAvance();
+        rafraichirEmplacementAffiche();
+    }
+
+    protected List<Arrondissement> construireListeArrond(string INSEE)
+    {
+        Connexion c = new Connexion();
+        OdbcCommand commande = new OdbcCommand();
+        commande.CommandText = "select * from Arrondissement where VilleINSEE = ? ";
+        OdbcParameter paramINSEE = new OdbcParameter("", DbType.String);
+        paramINSEE.Value = INSEE;
+        commande.Parameters.Add(paramINSEE);
+        foreach (Arrondissement arrond in listeArrondissementNoire)
+        {
+            commande.CommandText += " AND [Code Postal] <> ? ";
+            OdbcParameter paramCP = new OdbcParameter("", DbType.String);
+            paramCP.Value = arrond.CP;
+            commande.Parameters.Add(paramCP);
+        }
+        DataRowCollection drc = c.exeRequetteParametree(commande).Tables[0].Rows;
+        List<Arrondissement> liste = new List<Arrondissement>();
+        foreach (DataRow result in drc)
+        {
+            Arrondissement arr = new Arrondissement(result["Code Postal"].ToString());
+            liste.Add(arr);
+        }
+        return liste;
+    }
+
+    protected void ajouterArrondissementALaListeNoire(object sender, EventArgs e)
+    {
+        //on difinie l arrondissement a retirer
+        string CParrond = ((MemoryButton)sender).code;
+        Arrondissement arr = new Arrondissement(CParrond);
+        //on ajoute l arrondissement a la liste noire
+        listeArrondissementNoire.Add(arr);
+        //on retire l arrondissement dans les objet qui ne se rafraichissent pas au chargement
+        foreach (Emplacement empl in emplacementAffiche)
+        {
+            foreach (EmplacementRecherche ER in empl.ListeVille)
+            {
+                if (empl.HasArrondissement)
+                {
+                    foreach (Arrondissement arrondissementDeEmplacement in ER.ListeArrondissement)
+                    {
+                        if (arrondissementDeEmplacement.CP == arr.CP)
+                        {
+                            empl.ListeArrondissement.Remove(arrondissementDeEmplacement);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        //on rafraichit
+        rafraichirArrondissement();
+    }
+
+    protected void retirerArrondissementDelaListeNoire(Object sender, EventArgs e)
+    {
+        string CParrond = ((MemoryButton)sender).code;
+        Arrondissement trouve = null;
+
+        foreach (Arrondissement arr in listeArrondissementNoire)
+        {
+            if (arr.CP == CParrond)
+            {
+                trouve = arr;
+                break;
+            }
+        }
+        listeArrondissementNoire.Remove(trouve);
+        rechargerListeERDansEmplacement();
+        rafraichirArrondissement();
+    }
+
+    protected void rafraichirArrondissement()
+    {
+        foreach (Emplacement empl in emplacementAffiche)
+        {
+            if (empl.HasArrondissement)
+            {
+                empl.ListeArrondissement = construireListeArrond(empl.CodeINSEE);
+            }
+
+            foreach (EmplacementRecherche er in empl.ListeVille)
+            {
+                if (er.HasArrondissement)
+                {
+                    er.ListeArrondissement = construireListeArrond(er.CodeINSEE);
+                }
+            }
+
+        }
+        rafraichirEmplacementAffiche();
+    }
+
+    protected ListeEmplacementRecherche convertListeVilleToListeEmplacement(List<Ville> listeVille)
+    {
+        ListeEmplacementRecherche listeER = new ListeEmplacementRecherche();
+
+        foreach (Ville ville in listeVille)
+        {
+            bool hasArrondissement = false;
+            List<Arrondissement> listeArrond = null;
+            if (ville.cp.Length > 5)
+            {
+                hasArrondissement = true;
+                listeArrond = construireListeArrond(ville.insee);
+            }
+            EmplacementRecherche ER = new EmplacementRecherche(false, hasArrondissement, ville.insee, ville.nom, ville.cp, listeArrond);
+
+            Boolean nePasMettre = false;
+            foreach (EmplacementRecherche ERnoir in listeNoire)
+            {
+                if (ER.CodeINSEE == ERnoir.CodeINSEE)
+                {
+                    nePasMettre = true;
+                    break;
+                }
+            }
+            if (!nePasMettre) listeER.Add(ER);
+        }
+
+        return listeER;
+    }
+
+    protected void rechargerListeERDansEmplacement(string insee = null)
+    {
+        if (insee == null)
+        {
+            foreach (Emplacement empl in emplacementAffiche)
+            {
+                List<Ville> listeINSEE = PATRIMO.Outils.OutilsDistance.villeINSEEListeDistance(empl.CodeINSEE, empl.Distance);
+                ListeEmplacementRecherche listeER = convertListeVilleToListeEmplacement(listeINSEE);
+                empl.ListeVille = listeER;
+            }
+        }
+        else
+        {
+            foreach (Emplacement empl in emplacementAffiche)
+            {
+                if (empl.CodeINSEE == insee)
+                {
+                    List<Ville> listeINSEE = PATRIMO.Outils.OutilsDistance.villeINSEEListeDistance(empl.CodeINSEE, empl.Distance);
+                    ListeEmplacementRecherche listeER = convertListeVilleToListeEmplacement(listeINSEE);
+                    empl.ListeVille = listeER;
+                    break;
+                }
+            }
+        }
+    }
+}
