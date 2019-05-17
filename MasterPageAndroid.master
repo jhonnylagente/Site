@@ -1,0 +1,99 @@
+ <%@ Master Language="C#" AutoEventWireup="false" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head id="Head1" runat="server">
+    <title>site de l'agence immobili&eacute;re Patrimo Colombes</title>
+    <meta name="TITLE" content="Patrimo" />
+    <meta name="AUTHOR" content="Olivier Saglio"/>
+    <meta name="OWNER" content="info@patrimo.net"/>
+    <meta name="SUBJECT" content="agence immobilière"/>
+    <meta name="RATING" content="renseignement"/>
+    <meta name="ABSTRACT" content="patrimo.net site de l'agence immobili&grave;re Patrimo situ&eacute;e 25 rue Gabriel Peri à Colombes, vente, achat, location de maisons, d'appartements et de terrains en France"/>
+    <meta name="REVISIT-AFTER" content="15 DAYS"/>
+    <meta name="LANGUAGE" content="FR"/>
+    <meta name="ROBOTS" content="All"/>
+    <meta name="description" content="patrimo,achat vente location biens immobiliers, colombes, ile de france, hauts de seine, appartement,maison,terrain"/>
+    <meta name="keywords" content="92,92000,a vendre,achat immobilier,acheter immobilier,acheter louer,agence,agence immobiliere,agence immobilieres,agence immobiliã re,agence immobilière,agence immobilières,agence immobiliére,agences immobiliere,agences immobilieres,agences immobiliers,agences immobilières,agences immobiliéres,agent immobilier,agents immobiliers,annonce,annonce immobilières,annonces,annonces immobilieres,annonces immobilières,annonces location immobilier,annonces particulier immobilier,appart,appartement,appartements,ateliers lofts,centrale des particuliers,courbevoie,dans le,departement,fnaim,france mutualiste,git immo,guy hoquet,hautes seines,hauts de seine,hautsdeseine,hlm,ile de france,immo,immobilier,immobilier achats,immobilier cher,immobilier de france,immobilier de particulier a particulier,immobilier en france,immobilier fnaim,immobilier france,immobilier locations,immobilier particulier,immobilier terrain,immobilier à vendre,immobiliere,immobilieres,immobiliers,immobiliers france,location,location immobilier,location immobiliers,location immobilières,locations immobilières,locaux commerciaux,logement,louer,maison,maisons,meublés,mmobilier,notaire,notaires,ommobilier,panorimmo,petites annonces,programmes neufs,promoteur,recherche immobilier,se loger,se loger com,site immobilier,sites immobiliers,terrain,terrains,vente,ventes,92700,colombes,patrimo,patrimo"/>
+    <meta name="dc.keywords" content="92,92000,a vendre,achat immobilier,acheter immobilier,acheter louer,agence,agence immobiliere,agence immobilieres,agence immobiliã re,agence immobilière,agence immobilières,agence immobiliére,agences immobiliere,agences immobilieres,agences immobiliers,agences immobilières,agences immobiliéres,agent immobilier,agents immobiliers,annonce,annonce immobilières,annonces,annonces immobilieres,annonces immobilières,annonces location immobilier,annonces particulier immobilier,appart,appartement,appartements,ateliers lofts,centrale des particuliers,courbevoie,dans le,departement,fnaim,france mutualiste,git immo,guy hoquet,hautes seines,hauts de seine,hautsdeseine,hlm,ile de france,immo,immobilier,immobilier achats,immobilier cher,immobilier de france,immobilier de particulier a particulier,immobilier en france,immobilier fnaim,immobilier france,immobilier locations,immobilier particulier,immobilier terrain,immobilier à vendre,immobiliere,immobilieres,immobiliers,immobiliers france,location,location immobilier,location immobiliers,location immobilières,locations immobilières,locaux commerciaux,logement,louer,maison,maisons,meublés,mmobilier,notaire,notaires,ommobilier,panorimmo,petites annonces,programmes neufs,promoteur,recherche immobilier,se loger,se loger com,site immobilier,sites immobiliers,terrain,terrains,vente,ventes,92700,colombes,patrimo,patrimo"/>
+    <meta name="copyright" content="© 2007 Patrimo"/>
+    <meta name="revisit-after" content="15 days"/>
+    <meta name="identifier-url" content="http://www.patrimo.net"/>
+    <meta name="reply-to" content="info@patrimo.net"/>
+    <meta name="publisher" content="Olivier Saglio"/>
+    <meta name="date-creation-ddmmyyyy" content="(22012007)"/>
+    <meta http-equiv="VW96.OBJECT TYPE" content="Document"/>
+    <meta name="Category" content="Document"/>
+    <meta name="Page-topic" content="Document"/>
+    <meta name="Generator" content="visual studio"/>
+    <meta name="organization" content="Patrimo"/>
+    <meta name="contact" content="info@patrimo.net"/>
+    <meta name="contactName" content="Olivier Saglio"/>
+    <meta name="contactOrganization" content="Olivier Saglio"/>
+    <meta name="contactStreetAddress1" content="25 rue Gabriel Peri"/>
+    <meta name="contactZip" content="92700"/>
+    <meta name="contactCity" content="Colombes"/>
+    <meta name="contactState" content="France"/>
+    <meta name="Classification" content="Patrimo agence immobili&grave;e Colombes"/>
+    <meta http-equiv="content-Language" content="fr"/>
+    <meta http-equiv="content-type" content="text/html;charset=iso-8859-1"/>
+    <meta name="location" content="France, FRANCE"/>
+    <meta name="expires" content="never"/>
+    <meta name="date-revision-ddmmyyyy" content="(22062007)"/>
+    <meta name="Distribution" content="Global"/>
+    <meta name="Audience" content="General"/>
+    <meta http-equiv="content-Script-Type" content="text/javascript"/>
+    <meta http-equiv="content-Style-Type" content="text/css"/>
+     
+    <link href="popup.css" rel="stylesheet" type="text/css" />
+    <link href="../patrimo.css" rel="stylesheet" type="text/css" />
+    <link href="../carte.css" rel="stylesheet" type="text/css" />
+    <link href="menu.css" rel="stylesheet" type="text/css" />
+	<style type="text/css">
+		.style1 { width: 629px; }
+		.style2 { width: 1243px;}
+		#AnimFlashSitePatrimo { margin-top: 0px; }
+	</style>
+
+	<script src="../Jquery/jquery-1.7.2.js" type="text/javascript"></script>
+    <script src="../JSplugins/menuCSS/script.js" type="text/javascript"></script>
+	<link href="../JSplugins/menuCSS/styles.css" rel="stylesheet" type="text/css" />
+    <script src="../JSplugins/menuCSS/DDL/script.js" type="text/javascript"></script>
+	<link href="../JSplugins/menuCSS/DDL/styles.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript">
+
+	function interfaceVerifForm() {
+		if (typeof (verifForm) == "function") {
+			return verifForm();
+		}
+		else {
+			return true;
+		}
+	}
+		
+	function interfaceClick() {
+				if (typeof (curseurMouseup) == "function") {
+					curseurMouseup();
+				}
+    }
+</script>
+
+</head>
+
+<body>
+
+<form id="form1" runat="server" onsubmit="return interfaceVerifForm()">
+    <div class="Header">
+	   
+	   
+	   
+    <!-- Ancien bandeau ... On doit le garder tant qu'il y a des findcontrol('titrebandeau') partout ... La flemme de faire une recherche globale ...
+    <asp:Label ID="titrebandeau" runat="server" ></asp:Label> -->
+        <div class="textblanc" onmouseup="interfaceClick()">
+            <asp:contentPlaceHolder ID="contentPlaceHolder1" runat="server"> </asp:contentPlaceHolder>
+        </div>
+    </div>
+</form>
+</body>
+</html>

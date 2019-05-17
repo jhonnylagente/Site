@@ -1,0 +1,485 @@
+ <%@ Master Language="C#" AutoEventWireup="false" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head id="Head1" runat="server">
+    <title>site de l'agence immobili&eacute;re Patrimo Colombes</title>
+    <meta name="TITLE" content="Patrimo" />
+    <meta name="AUTHOR" content="Olivier Saglio"/>
+    <meta name="OWNER" content="info@patrimo.net"/>
+    <meta name="SUBJECT" content="agence immobilière"/>
+    <meta name="RATING" content="renseignement"/>
+    <meta name="ABSTRACT" content="patrimo.net site de l'agence immobili&grave;re Patrimo situ&eacute;e 25 rue Gabriel Peri à Colombes, vente, achat, location de maisons, d'appartements et de terrains en France"/>
+    <meta name="REVISIT-AFTER" content="15 DAYS"/>
+    <meta name="LANGUAGE" content="FR"/>
+    <meta name="ROBOTS" content="All"/>
+    <meta name="description" content="patrimo,achat vente location biens immobiliers, colombes, ile de france, hauts de seine, appartement,maison,terrain"/>
+    <meta name="keywords" content="92,92000,a vendre,achat immobilier,acheter immobilier,acheter louer,agence,agence immobiliere,agence immobilieres,agence immobiliã re,agence immobilière,agence immobilières,agence immobiliére,agences immobiliere,agences immobilieres,agences immobiliers,agences immobilières,agences immobiliéres,agent immobilier,agents immobiliers,annonce,annonce immobilières,annonces,annonces immobilieres,annonces immobilières,annonces location immobilier,annonces particulier immobilier,appart,appartement,appartements,ateliers lofts,centrale des particuliers,courbevoie,dans le,departement,fnaim,france mutualiste,git immo,guy hoquet,hautes seines,hauts de seine,hautsdeseine,hlm,ile de france,immo,immobilier,immobilier achats,immobilier cher,immobilier de france,immobilier de particulier a particulier,immobilier en france,immobilier fnaim,immobilier france,immobilier locations,immobilier particulier,immobilier terrain,immobilier à vendre,immobiliere,immobilieres,immobiliers,immobiliers france,location,location immobilier,location immobiliers,location immobilières,locations immobilières,locaux commerciaux,logement,louer,maison,maisons,meublés,mmobilier,notaire,notaires,ommobilier,panorimmo,petites annonces,programmes neufs,promoteur,recherche immobilier,se loger,se loger com,site immobilier,sites immobiliers,terrain,terrains,vente,ventes,92700,colombes,patrimo,patrimo"/>
+    <meta name="dc.keywords" content="92,92000,a vendre,achat immobilier,acheter immobilier,acheter louer,agence,agence immobiliere,agence immobilieres,agence immobiliã re,agence immobilière,agence immobilières,agence immobiliére,agences immobiliere,agences immobilieres,agences immobiliers,agences immobilières,agences immobiliéres,agent immobilier,agents immobiliers,annonce,annonce immobilières,annonces,annonces immobilieres,annonces immobilières,annonces location immobilier,annonces particulier immobilier,appart,appartement,appartements,ateliers lofts,centrale des particuliers,courbevoie,dans le,departement,fnaim,france mutualiste,git immo,guy hoquet,hautes seines,hauts de seine,hautsdeseine,hlm,ile de france,immo,immobilier,immobilier achats,immobilier cher,immobilier de france,immobilier de particulier a particulier,immobilier en france,immobilier fnaim,immobilier france,immobilier locations,immobilier particulier,immobilier terrain,immobilier à vendre,immobiliere,immobilieres,immobiliers,immobiliers france,location,location immobilier,location immobiliers,location immobilières,locations immobilières,locaux commerciaux,logement,louer,maison,maisons,meublés,mmobilier,notaire,notaires,ommobilier,panorimmo,petites annonces,programmes neufs,promoteur,recherche immobilier,se loger,se loger com,site immobilier,sites immobiliers,terrain,terrains,vente,ventes,92700,colombes,patrimo,patrimo"/>
+    <meta name="copyright" content="© 2007 Patrimo"/>
+    <meta name="revisit-after" content="15 days"/>
+    <meta name="identifier-url" content="http://www.patrimo.net"/>
+    <meta name="reply-to" content="info@patrimo.net"/>
+    <meta name="publisher" content="Olivier Saglio"/>
+    <meta name="date-creation-ddmmyyyy" content="(22012007)"/>
+    <meta http-equiv="VW96.OBJECT TYPE" content="Document"/>
+    <meta name="Category" content="Document"/>
+    <meta name="Page-topic" content="Document"/>
+    <meta name="Generator" content="visual studio"/>
+    <meta name="organization" content="Patrimo"/>
+    <meta name="contact" content="info@patrimo.net"/>
+    <meta name="contactName" content="Olivier Saglio"/>
+    <meta name="contactOrganization" content="Olivier Saglio"/>
+    <meta name="contactStreetAddress1" content="25 rue Gabriel Peri"/>
+    <meta name="contactZip" content="92700"/>
+    <meta name="contactCity" content="Colombes"/>
+    <meta name="contactState" content="France"/>
+    <meta name="Classification" content="Patrimo agence immobili&grave;e Colombes"/>
+    <meta http-equiv="content-Language" content="fr"/>
+    <meta http-equiv="content-type" content="text/html;charset=iso-8859-1"/>
+    <meta name="location" content="France, FRANCE"/>
+    <meta name="expires" content="never"/>
+    <meta name="date-revision-ddmmyyyy" content="(22062007)"/>
+    <meta name="Distribution" content="Global"/>
+    <meta name="Audience" content="General"/>
+    <meta http-equiv="content-Script-Type" content="text/javascript"/>
+    <meta http-equiv="content-Style-Type" content="text/css"/>
+     
+    <link href="popup.css" rel="stylesheet" type="text/css" />
+    <link href="../patrimo.css" rel="stylesheet" type="text/css" />
+    <link href="../carte.css" rel="stylesheet" type="text/css" />
+    <link href="menu.css" rel="stylesheet" type="text/css" />
+	<style type="text/css">
+		.style1 { width: 629px; }
+		.style2 { width: 1243px;}
+		#AnimFlashSitePatrimo { margin-top: 0px; }
+	</style>
+
+	<script src="../Jquery/jquery-1.7.2.js" type="text/javascript"></script>
+    <script src="../JSplugins/menuCSS/script.js" type="text/javascript"></script>
+	<link href="../JSplugins/menuCSS/styles.css" rel="stylesheet" type="text/css" />
+    <script src="../JSplugins/menuCSS/DDL/script.js" type="text/javascript"></script>
+	<link href="../JSplugins/menuCSS/DDL/styles.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript">
+
+ $(document).ready(function () {
+        document.getElementById('bouton_close_vid').click();
+        });
+    function show_vid() {
+        if (document.getElementById('video_prez').style.display == 'none') {
+            document.getElementById('video_prez').style.display = 'inline-block';
+            document.getElementById('container_video_promo').style.display = 'inline-block';
+            
+        }
+        else {
+            document.getElementById('video_prez').style.display = 'none';
+            document.getElementById('container_video_promo').style.display = 'none';
+        }
+    }
+
+	function interfaceVerifForm() {
+		if (typeof (verifForm) == "function") {
+			return verifForm();
+		}
+		else {
+			return true;
+		}
+	}
+		
+	function interfaceClick() {
+				if (typeof (curseurMouseup) == "function") {
+					curseurMouseup();
+				}
+    }
+
+     function fb() {
+         window.open('https://www.facebook.com/pages/Réseau-Immobillier-Patrimo/1563841133833530');
+     }
+
+     function tweet() {
+         window.open('https://twitter.com/patrimo1');
+     }
+</script>
+
+<style type="text/css">
+
+.search
+{
+   transition: 1s;
+  -moz-transition: 1s;
+  -o-transition: 1s;
+  -htm-transition: 1s;
+  -webkit-transition: 1s;
+  opacity: 1;
+  -moz-opacity: 1;
+  -khtml-opacity: 1;
+  filter: alpha(opacity=1);
+}
+.search:hover
+{
+   opacity: 0.5;
+  -moz-opacity: 0.5;
+  -khtml-opacity: 0.5;
+  filter: alpha(opacity=0.5);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="share">
+    <br />
+    <a href='javascript:fb()'> <img style='margin-top:-3px;margin-bottom:-3px ' src='../img_site/fb.jpg' alt='fb' height="50px" width="50px"/> </a>
+    <a href='javascript:tweet()'> <img style='margin-top:6px;margin-bottom:-3px ' src='../img_site/tweet.jpg' alt='tweet' height="50px" width="50px"/> </a> 
+</div>
+
+<div id="container_video_promo" onclick='show_vid()' class="container_video_promo"></div>
+<div id='video_prez' class='video_promo'>
+	<input type="submit" id='bouton_close_vid' onclick='show_vid()' class="flat-button" value='x' style='width:25px; font-weigth:bold;float:right; margin-right:10px;margin-top:5px'/> 
+	<br/>	
+	<iframe style='margin-left:2.5%' width="95%" height="95%" src="https://www.youtube.com/embed/fPWMyl2kZ3g" frameborder="0" allowfullscreen></iframe>	
+</div>
+
+
+<form id="form1" runat="server" onsubmit="return interfaceVerifForm()">
+    <div class="Header">
+       <div class="entete">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td valign="top" align="left">
+                        <a href="http://www.patrimo.net"><img alt="" src="../img_site/logo_patrimo.jpg"/></a>
+                    </td>
+                    <td>
+                        <a href="http://www.patrimo.net" class="divheader" style="color:black">PATRIMO</a>
+                    </td>
+                    <td>
+                        <div class="divborder">      
+                        </div>
+                    </td>
+                    <td>
+                        <a href="<%Response.Write(Session["site_prestige"].ToString()); %>" class="divheader" style="color:black">PRESTIGE</a>
+                    </td>
+                    <td>
+                        <div class="divborder">      
+                        </div>
+                    </td>
+                    <td width="100%"  >
+                        <div>
+                        <% 
+                        if (Request.Cookies["ClientID"] != null && Session["logged"].Equals(true))
+                        {
+                            HttpCookie ClientIDcookie = Request.Cookies["ClientID"];
+                            member = (Membre)Session["Membre"];
+                        %>         
+                        <input type="button" value="<%=ClientIDcookie.Value%>" class="divheaderID" readonly="true" />
+                        
+                        <%} %>
+                          </div>
+                    </td>
+                    <td style="vertical-align:top;">
+                          <div>
+                          <%try
+                                {
+                            if (Request.Cookies["ClientID"] != null && Session["logged"].Equals(true))
+                            {
+                                HttpCookie ClientIDcookie = Request.Cookies["ClientID"];
+                                member = (Membre)Session["Membre"];
+                                %>                    
+                                <asp:LinkButton CssClass="connexion" ID="LinkBdutton1" runat="server" Font-Underline="true"
+                                    Font-Size="16px" Text="Deconnexion" OnClick="Button4_Click" />
+                                 <% }
+                                    else
+                                    {
+                                 %>           
+                                    <asp:LinkButton CssClass="connexion" ID="ButdtonCon" runat="server" Font-Underline="true"
+                                        Font-Size="16px" Text="Inscription - Connexion" OnClick="Button5_Click" />
+                                <%      
+                                        }
+                                    }
+                                    catch
+                                    {
+                                        Response.Write("<a href=\"inscriptionAccueil.aspx\"> Mon espace</a>");
+                                    }
+                                 %>
+                                 </div>  
+                        </td>      
+                </tr>
+            </table>
+            <!-- MENU DE NAVIGATION 
+            if (membre connecté){
+                if(nego/ultranego) MENU NEGO;
+                else MENU UTILISATEUR CONNECTE NON NEGO;
+            }
+            else MENU DE BASE;
+            -->
+          <div id='cssmenu'>	
+            <%if (Session["logged"]!= null && Session["logged"].Equals(true))
+            {
+                member = (Membre)Session["Membre"];
+                String NomNego = member.PRENOM + " " + member.NOM;
+                if (member.STATUT == "ultranego" || member.STATUT == "nego" || member.STATUT == "nego_agence")
+                {%>
+
+            <!-- MENU NEGO -->
+                <ul>
+				   <li class='has-sub'><a href='recherche.aspx'><span>Je cherche</span></a>
+                      <ul>
+						 <li><a href='recherche.aspx'><span>Je cherche</span></a></li>
+                         <li class='has-sub'><a href='vendre.aspx'><span>Je vends</span></a>
+                            <ul>
+                               <li><a href='vendre.aspx'><span>Je vends</span></a></li>
+                               <li class='last'><a href='vendre.aspx?type=v_estim'><span>Je fais estimer</span></a></li>
+                            </ul>
+                         </li>
+                         <li class='has-sub'><a href='vendre.aspx?type=loc'><span>Je loue</span></a>
+                            <ul>
+                               <li><a href='vendre.aspx?type=loc'><span>Je loue</span></a></li>
+							   <li><a href='vendre.aspx?type=l_gerer'><span>Je fais gérer</span></a></li>
+                               <li class='last'><a href='vendre.aspx?type=l_estim'><span>Je fais estimer</span></a></li>
+                            </ul>
+                         </li>
+                      </ul>
+                   </li>
+                   <li class='has-sub'><a href='#'><span>Autres</span></a>
+                      <ul>
+                         <li class='has-sub'><a href='recrutement_leconcept.aspx'><span>Rejoignez-nous</span></a>
+                            <ul>
+								<li><a href='recrutement_leconcept.aspx'><span>Présentation</span></a></li>
+								<li><a href='recrutement_aijelebonprofil.aspx'><span>Qui peut nous rejoindre ?</span></a></li>
+								<li><a href='recrutement_statutagentcommercial.aspx'><span>Etre conseiller immobilier ?</span></a></li>
+								<li><a href='./Reunions_afficher.aspx'><span>Nos réunions d'information</span></a></li>
+								<li><a href='recrutement_foireauxquestions.aspx'><span>Foire Aux Questions</span></a></li>
+								<li><a href='contact3.aspx?appelcontact=menu'><span>Contact</span></a></li>
+							</ul>
+                         </li>
+                         <li><a href='votreavis.aspx'><span>Votre avis</span></a></li>
+						 <li class='has-sub'><a href='outils_calcu_mensualite.aspx'><span>Je simule</span></a>
+                            <ul>
+							 <li><a href='outils_calcu_montant.aspx'><span>Calculette financiere</span></a></li>
+							 <li><a href='outilsendettement.aspx'><span>Capacité d'endettement</span></a></li>
+							 <li><a href='outilconvertisseur.aspx'><span>Conversions des mesures</span></a></li>
+							 <li><a href='outils_frais_notaire.aspx'><span>Frais de notaire</span></a></li>
+						  </ul>	
+                         </li>
+                      </ul>
+                   </li>           
+                   <li class='has-sub'><a href='moncomptetableaudebord_bis.aspx'><span>Espace de travail</span></a>
+                      <ul>
+						 <li><a href='moncomptetableaudebord_bis.aspx'><span>Tableau de bord</span></a></li>
+                         <li class='has-sub'><a href='monComptechoixtransaction.aspx'><span>J'ajoute un bien</span></a>
+                            <ul>
+                               <li><a href='./ajout_nego.aspx'><span>Vente</span></a></li>
+                               <li class='last'><a href='./ajout_nego_loc.aspx'><span>Location</span></a></li>
+                            </ul>
+                         </li>
+                         <li class='has-sub'><a href='./monCompteAcquereur.aspx'><span>Mes acquéreurs</span></a>
+                            <ul>
+                               <li><a href='./liste_acquereur.aspx'><span>Voir la liste</span></a></li>
+                               <li class='last'><a href='./ajout_acquereur.aspx?new=1'><span>Ajouter un acquéreur</span></a></li>
+                            </ul>
+                         </li>
+                         <li><a href='mesVentes.aspx'><span>Mes ventes</span></a></li>
+                         <li><a href='mesLocations.aspx'><span>Mes locations</span></a></li>
+						 <li><a href='./mesCommissions.aspx'><span>Mes commissions</span></a></li>
+						 <li class='has-sub'><a href='./Reunions_gerer.aspx'><span>Mes reunions</span></a>
+                            <ul>
+                               <li><a href='./Reunions_gerer.aspx'><span>Ajouter une reunions</span></a></li>
+                               <li class='last'><a href='./Reunions_afficher.aspx'><span>Toutes les reunions</span></a></li>
+                            </ul>
+                         </li>
+                         <li><a href='./hierarchie.aspx'><span>Mon reseau</span></a></li>
+                      </ul>
+                   </li>
+                   <li class='has-sub'><a href='./monCompteCoordonnees.aspx'><span>Mon compte</span></a>
+                      <ul>
+						<li><a href='./monCompteCoordonnees.aspx'><span>Mon Compte</span></a></li>
+						<li><a href='./monCompteAlertes.aspx'><span>Mes alertes mail</span></a></li>
+						<li><a href='./monCompteAnnonces.aspx'><span>Ma selection</span></a></li>
+                      </ul>
+                   </li>
+                    <li class='has-sub'><a href='formation.aspx'><span>Formation</span></a>
+                        <ul>
+                            <li><a href='formation.aspx'><span>Formation</span></a></li>
+							<li><a href='modeledoc.aspx?type=doc'><span>Documents</span></a></li>
+                            <li class='last'><a href='modeledoc.aspx?type=lettres'><span>Lettres</span></a></li>
+                        </ul>
+                        </li>
+				   <%if (member != null && member.STATUT == "ultranego")
+         {%>
+				   <li class='has-sub'><a href='#'><span>Admin</span></a>
+                      <ul>
+						<li class='has-sub'><a href='./ajouterCompte.aspx'><span>Gerer les comptes</span></a>
+                            <ul>
+                               <li><a href='./ajouterCompte.aspx'><span>Ajouter un compte</span></a></li>
+                               <li class='last'><a href='./modifierCompte.aspx'><span>Modifier un compte</span></a></li>
+                            </ul>
+                         </li>
+						<li class='has-sub'><a href='./MailGeneral.aspx'><span>Gerer les mails</span></a>
+                            <ul>
+                               <li><a href='./MailGeneral.aspx'><span>Envoyer un mail</span></a></li>
+                               <li class='last'><a href='./etatMails.aspx'><span>Gerer les mails</span></a></li>
+                            </ul>
+                         </li>
+						<li><a href='./venteListe.aspx'><span>Liste des ventes</span></a></li>
+                        <li><a href='./locationListe.aspx'><span>Liste des locations</span></a></li>
+						<li><a href='./listeCommissions.aspx'><span>Liste des commissions</span></a></li>
+						<li><a href='./statsrecherche.aspx'><span>Statistiques</span></a></li>
+                      </ul>
+                   </li>
+              </ul>
+
+             <%}
+                }
+                else
+                {%>
+                <!-- MENU UTILISATEUR CONNECTE NON NEGO -->
+                <ul>
+                   <li><a href='recherche.aspx'><span>Je cherche</span></a></li>
+                   <li class='has-sub'><a href='vendre.aspx'><span>Je vends</span></a>
+                      <ul>
+                         <li><a href='vendre.aspx'><span>Je vends</span></a></li>
+                         <li><a href='vendre.aspx?type=v_estim'><span>Je fais estimer</span></a></li>
+                      </ul>
+                   </li>
+                   <li class='has-sub'><a href='vendre.aspx?type=loc'><span>Je loue</span></a>
+                      <ul>
+                         <li><a href='vendre.aspx?type=loc'><span>Je loue</span></a></li>
+						 <li><a href='vendre.aspx?type=l_gerer'><span>Je fais gérer</span></a></li>
+                         <li class='last'><a href='vendre.aspx?type=l_estim'><span>Je fais estimer</span></a></li>
+					  </ul>
+                   </li>
+                   <li class='has-sub'><a href='outils_calcu_mensualite.aspx'><span>Je simule</span></a>
+                      <ul>
+                         <li><a href='outils_calcu_montant.aspx'><span>Calculette financiere</span></a></li>
+						 <li><a href='outilsendettement.aspx'><span>Capacité d'endettement</span></a></li>
+						 <li><a href='outilconvertisseur.aspx'><span>Conversions des mesures</span></a></li>
+						 <li class='last'><a href='outils_frais_notaire.aspx'><span>Frais de notaire</span></a></li>
+                      </ul>				
+                   </li>
+                   <li class='has-sub'><a href='./monCompteCoordonnees.aspx'><span>Mon compte</span></a>
+                      <ul>
+						<li><a href='./monCompteCoordonnees.aspx'><span>Mon Compte</span></a></li>
+						<li><a href='./monCompteAlertes.aspx'><span>Mes alertes mail</span></a></li>
+						<li><a href='./monCompteAnnonces.aspx'><span>Ma selection</span></a></li>
+                      </ul>
+                   </li>
+                   <li class='has-sub'><a href='recrutement.aspx'><span>Rejoignez-nous</span></a>
+                      <ul>
+                         <li><a href='recrutement_leconcept.aspx'><span>Présentation</span></a></li>
+						 <li><a href='recrutement_aijelebonprofil.aspx'><span>Qui peut nous rejoindre ?</span></a></li>
+						 <li><a href='recrutement_statutagentcommercial.aspx'><span>Etre conseiller immobilier ?</span></a></li>
+						 <li><a href='./Reunions_afficher.aspx'><span>Nos réunions d'information</span></a></li>
+						 <li><a href='recrutement_foireauxquestions.aspx'><span>Foire Aux Questions</span></a></li>
+						 <li class='last'><a href='contact3.aspx?appelcontact=menu'><span>Contact</span></a></li>
+					  </ul>
+                   </li>
+                   <li class='last'><a href='votreavis.aspx'><span>Votre avis</span></a></li>
+                 </ul>
+                <%}
+               
+               }
+             else
+             { %> 
+             <!-- MENU DE BASE -->
+                <ul>
+                   <li><a href='recherche.aspx'><span>Je cherche</span></a></li>
+                   <li class='has-sub'><a href='vendre.aspx'><span>Je vends</span></a>
+                      <ul>
+                         <li><a href='vendre.aspx'><span>Je vends</span></a></li>
+                         <li><a href='vendre.aspx?type=v_estim'><span>Je fais estimer</span></a></li>
+                      </ul>
+                   </li>
+                   <li class='has-sub'><a href='vendre.aspx?type=loc'><span>Je loue</span></a>
+                      <ul>
+                         <li><a href='vendre.aspx?type=loc'><span>Je loue</span></a></li>
+						 <li><a href='vendre.aspx?type=l_gerer'><span>Je fais gérer</span></a></li>
+                         <li class='last'><a href='vendre.aspx?type=l_estim'><span>Je fais estimer</span></a></li>
+					  </ul>
+                   </li>
+                   <li class='has-sub'><a href='outils_calcu_mensualite.aspx'><span>Je simule</span></a>
+                      <ul>
+                         <li><a href='outils_calcu_montant.aspx'><span>Calculette financiere</span></a></li>
+						 <li><a href='outilsendettement.aspx'><span>Capacité d'endettement</span></a></li>
+						 <li><a href='outilconvertisseur.aspx'><span>Conversions des mesures</span></a></li>
+						 <li class='last'><a href='outils_frais_notaire.aspx'><span>Frais de notaire</span></a></li>
+                      </ul>				
+                   </li>
+                   <li class='has-sub'><a href='recrutement.aspx'><span>Rejoignez-nous</span></a>
+                      <ul>
+                         <li><a href='recrutement_leconcept.aspx'><span>Présentation</span></a></li>
+						 <li><a href='recrutement_aijelebonprofil.aspx'><span>Qui peut nous rejoindre ?</span></a></li>
+						 <li><a href='recrutement_statutagentcommercial.aspx'><span>Etre conseiller immobilier ?</span></a></li>
+						 <li><a href='./Reunions_afficher.aspx'><span>Nos réunions d'information</span></a></li>
+						 <li><a href='recrutement_foireauxquestions.aspx'><span>Foire Aux Questions</span></a></li>
+						 <li class='last'><a href='contact3.aspx?appelcontact=menu'><span>Contact</span></a></li>
+					  </ul>
+                   </li>
+                   <li class='last'><a href='votreavis.aspx'><span>Votre avis</span></a></li>
+                 </ul>
+              <%}%>
+
+        </div>
+
+       </div>   
+	   
+	   
+	   
+    <!-- Ancien bandeau ... On doit le garder tant qu'il y a des findcontrol('titrebandeau') partout ... La flemme de faire une recherche globale ...
+    <asp:Label ID="titrebandeau" runat="server" ></asp:Label> -->
+        <div class="textblanc" onmouseup="interfaceClick()">
+            <asp:contentPlaceHolder ID="contentPlaceHolder1" runat="server"> </asp:contentPlaceHolder>
+
+
+
+             <!-- FOOTER-->
+             <div id="menu_footer">
+			    <br/>
+			    <center>
+				    <div>
+
+                        <a href="./Recherche_agent.aspx" style='color:black;display:inline-block;cursor:pointer;' class="search">
+					        <img style='margin-bottom:-6px;' src='../img_site/new_search/agent.png' alt='agent'/>
+					        <div class='texte_menu_footer'>Trouvez <br/>un agent</div>
+                        </a>
+                        <a href="./vendre.aspx?type=v_estim" style='color:black;display:inline-block; cursor:pointer' class="search">
+					        <img style='margin-bottom:-6px;' src='../img_site/new_search/estimer.png' alt='estimer'/>
+					        <div class='texte_menu_footer'>Estimez <br/>votre bien</div>
+					    </a>
+                        <a href="./recrutement.aspx" style='color:black;display:inline-block; cursor:pointer' class="search">
+                            <img style='margin-bottom:-6px;' src='../img_site/new_search/equipe.png' alt='recrutement'/>
+					        <div class='texte_menu_footer'>Rejoignez <br/>notre équipe</div>
+					    </a>
+                        <a href="./partenaires.aspx" style='color:black;display:inline-block; cursor:pointer' class="search">
+                            <img style='margin-bottom:-6px;' src='../img_site/new_search/partenaires.png' alt='partenaires'/>
+					        <div class='texte_menu_footer'>Nos <br/>partenaires</div>
+					    </a>
+                        <div onclick='show_vid()' style='display:inline-block; cursor:pointer' class="search">
+                            <img style='margin-bottom:-6px;' src='../img_site/new_search/reseau_2.png' alt='video'/>
+					        <div class='texte_menu_footer'>Notre <br/>Réseau</div>
+					    </div>
+				    </div>
+			    </center>
+				<div id="baspage">   
+				    <br />
+					<center> <img src="../img_site/barre_bas_page.gif" alt="barre"/> </center>   
+                    <br />
+					<center>	
+						<a href="Mentions_Legales.aspx">Mention Légales</a> |						
+						<a href="contact3.aspx?appelcontact='menu'"> Contact</a> |
+						<a href="../Honoraires.pdf"> Honoraires</a>
+					</center> 
+                    <br />
+					<center>		   
+					    <font color="#000000" size="2">Visiteurs en ligne: <%=Application["OnlineUsers"].ToString()%></font>&nbsp;&nbsp;&nbsp;<font color="#000000" size="3">Copyright © <%=DateTime.Now.Year%> Patrimo</font><font color="#000000" face="Verdana" size="1"><br/><br/></font>	   
+					</center>
+			    </div>
+				
+		</div>
+        </div>
+    </div>
+</form>
+</body>
+</html>
